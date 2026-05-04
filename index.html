@@ -1,0 +1,1964 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="RA-1 Averías">
+<meta name="application-name" content="RA-1 Averías">
+<meta name="theme-color" content="#f97316">
+<link id="apple-touch-icon" rel="apple-touch-icon" href="">
+<script>
+// Genera icono dinámicamente y lo asigna
+(function(){
+  var c=document.createElement('canvas');
+  c.width=192;c.height=192;
+  var ctx=c.getContext('2d');
+  ctx.fillStyle='#f97316';
+  var r=24;
+  ctx.beginPath();
+  ctx.moveTo(r,0);ctx.lineTo(192-r,0);ctx.quadraticCurveTo(192,0,192,r);
+  ctx.lineTo(192,192-r);ctx.quadraticCurveTo(192,192,192-r,192);
+  ctx.lineTo(r,192);ctx.quadraticCurveTo(0,192,0,192-r);
+  ctx.lineTo(0,r);ctx.quadraticCurveTo(0,0,r,0);
+  ctx.closePath();ctx.fill();
+  ctx.fillStyle='white';
+  ctx.font='bold 62px -apple-system,sans-serif';
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText('RA1',96,88);
+  ctx.font='bold 28px -apple-system,sans-serif';
+  ctx.fillText('Averías',96,138);
+  var url=c.toDataURL('image/png');
+  document.getElementById('apple-touch-icon').href=url;
+  // Manifest inline
+  var manifest={name:'RA-1 Averías y Ayudas',short_name:'RA-1',start_url:window.location.href,display:'standalone',background_color:'#0f1117',theme_color:'#f97316',icons:[{src:url,sizes:'192x192',type:'image/png'}]};
+  var blob=new Blob([JSON.stringify(manifest)],{type:'application/json'});
+  var mUrl=URL.createObjectURL(blob);
+  var link=document.createElement('link');
+  link.rel='manifest';link.href=mUrl;
+  document.head.appendChild(link);
+})();
+</script>
+<title>RA-1 · Averías y Ayudas</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#ffffff;--bg2:#f3f4f6;--bg3:#e9eaed;
+  --card:#ffffff;--card2:#f0f1f4;
+  --border:#e0e2ea;
+  --orange:#f97316;--orange2:#ea580c;
+  --text:#111827;--text2:#4b5563;--text3:#9ca3af;
+  --green:#22c55e;--red:#ef4444;--blue:#3b82f6;--amber:#f59e0b;
+  --r:12px;--r2:8px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:80px;padding-bottom:calc(80px + env(safe-area-inset-bottom));font-size:14px;line-height:1.5}
+h1{font-size:18px;font-weight:700}
+h2{font-size:15px;font-weight:600;color:var(--text)}
+h3{font-size:13px;font-weight:600;color:var(--text2)}
+
+/* TOP BAR */
+#topbar{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);padding:10px 16px 8px}
+#topbar-inner{display:flex;align-items:center;gap:10px}
+.logo{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.logo-dot{width:44px;height:44px;background:#ffffff;border:2px solid var(--orange);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:900;font-size:13px;color:var(--orange);letter-spacing:-0.5px;line-height:1;gap:1px;box-shadow:0 1px 4px rgba(249,115,22,0.15)}
+.logo-dot-sub{font-size:7px;font-weight:700;color:var(--orange);letter-spacing:0px}
+.logo-title{font-size:15px;font-weight:700;line-height:1.1}
+.logo-sub{font-size:10px;color:var(--text2);font-weight:400}
+#search-wrap{flex:1;position:relative}
+#search{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:7px 12px 7px 32px;font-size:13px;color:var(--text);outline:none}
+#search::placeholder{color:var(--text3)}
+.search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:14px}
+
+/* BOTTOM NAV */
+#bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom,0)}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 4px 8px;border:none;background:transparent;color:var(--text3);font-size:10px;font-weight:500;cursor:pointer;transition:color 0.15s}
+.nav-btn.active{color:var(--orange)}
+.nav-icon{font-size:20px}
+
+/* PAGES */
+.page{display:none;padding:0}
+.page.active{display:block}
+
+/* SECTION GRID */
+.section-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:16px}
+.section-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px 12px;cursor:pointer;transition:background 0.15s;display:flex;flex-direction:column;gap:6px}
+.section-card:active{background:var(--card2)}
+.section-icon{font-size:24px}
+.section-name{font-size:13px;font-weight:600;color:var(--text);line-height:1.2}
+.section-count{font-size:11px;color:var(--text3)}
+.section-card.wide{grid-column:1/-1}
+
+/* PAGE HEADER */
+.page-header{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);position:sticky;top:61px;z-index:50;background:var(--bg)}
+.back-btn{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--text);font-size:13px;cursor:pointer;white-space:nowrap}
+.page-header h2{font-size:15px;font-weight:700}
+.badge{font-size:10px;background:var(--orange);color:white;border-radius:999px;padding:2px 7px;margin-left:auto;flex-shrink:0}
+
+/* CARDS */
+.card-list{padding:12px 16px;display:flex;flex-direction:column;gap:8px}
+.fault-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;cursor:pointer}
+.fault-card:active{background:var(--card2)}
+.fault-card-header{padding:12px;display:flex;flex-direction:column;gap:4px}
+.fault-title{font-size:13px;font-weight:600;line-height:1.3;color:var(--text)}
+.fault-meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.tag{font-size:10px;font-weight:600;border-radius:4px;padding:2px 7px}
+.tag-machine{background:#1e3a5f;color:#60a5fa}
+.tag-date{background:#1a2a1a;color:#4ade80}
+.tag-op{background:#2a1a2a;color:#c084fc}
+.tag-done{background:#14291a;color:#22c55e}
+.chevron{color:var(--text3);margin-left:auto;font-size:16px}
+
+/* DETAIL VIEW */
+.detail-section{padding:14px 16px;border-bottom:1px solid var(--border)}
+.detail-label{font-size:10px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+.detail-text{font-size:13px;color:var(--text);line-height:1.5}
+
+/* STEP LIST */
+.step-list{padding:12px 16px;display:flex;flex-direction:column;gap:8px}
+.step-item{display:flex;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:12px}
+.step-num{width:24px;height:24px;border-radius:50%;background:var(--orange);color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-text{font-size:13px;color:var(--text);line-height:1.4}
+
+/* INFO CARDS */
+.info-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin:0 16px 8px}
+.info-card-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px}
+.info-card-body{font-size:12px;color:var(--text2);line-height:1.5}
+
+/* PASSWORD CARD */
+.pass-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin:0 16px 8px;display:flex;align-items:center;justify-content:space-between}
+.pass-desc{font-size:13px;color:var(--text2)}
+.pass-code{font-size:20px;font-weight:700;color:var(--orange);font-family:monospace;letter-spacing:2px}
+
+/* ALARM CARD */
+.alarm-card{background:var(--card);border-left:3px solid var(--red);border-radius:0 var(--r2) var(--r2) 0;padding:12px 14px;margin:0 16px 8px}
+.alarm-num{font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px}
+.alarm-desc{font-size:13px;color:var(--text);line-height:1.4}
+
+/* COMMAND TABLE */
+.cmd-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:12px 14px;margin:0 16px 8px;display:flex;align-items:start;gap:12px}
+.cmd-key{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:4px 8px;font-size:11px;font-weight:700;color:var(--amber);font-family:monospace;white-space:nowrap;flex-shrink:0}
+.cmd-action{font-size:13px;color:var(--text);line-height:1.4}
+
+/* SEARCH RESULTS */
+.search-result-section{padding:12px 16px 4px;font-size:11px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:0.5px}
+
+/* SEMANA HEADER */
+.semana-header{background:var(--bg3);padding:10px 16px;font-size:11px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid var(--border)}
+.semana-item{padding:11px 16px;border-bottom:1px solid var(--border);font-size:13px;color:var(--text);display:flex;gap:10px;align-items:start}
+.check-circle{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;margin-top:1px}
+
+/* EMPTY */
+.empty{text-align:center;padding:48px 24px;color:var(--text3)}
+.empty-icon{font-size:40px;margin-bottom:8px}
+
+/* SECTION SUBTITLE */
+.section-subtitle{font-size:12px;color:var(--text3);padding:8px 16px 0;margin-bottom:-4px}
+
+/* CARRETILLAS */
+.carr-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin:0 16px 8px}
+.carr-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.carr-row{display:flex;justify-content:space-between;align-items:start;padding:4px 0;border-bottom:1px solid var(--border)}
+.carr-row:last-child{border-bottom:none;padding-bottom:0}
+.carr-key{font-size:11px;color:var(--text3)}
+.carr-val{font-size:12px;color:var(--text);text-align:right;max-width:60%}
+.vencido{color:var(--red);font-weight:700}
+
+/* PRIORIDAD banner */
+.priority-banner{background:linear-gradient(135deg,#7c1a0a,#1a0505);border:1px solid #ef4444;border-radius:var(--r);padding:12px 14px;margin:12px 16px;display:flex;gap:10px;align-items:center}
+.priority-text{font-size:13px;color:#fca5a5;font-weight:500}
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <div id="topbar-inner">
+    <div class="logo">
+      <div class="logo-dot">RA1<span class="logo-dot-sub">⚡</span></div>
+      <div><div class="logo-title">Averías y Ayudas</div><div class="logo-sub">RA-1 · PC</div></div>
+    </div>
+    <div id="search-wrap">
+      <span class="search-icon">⌕</span>
+      <input id="search" type="search" placeholder="Buscar..." autocomplete="off">
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav id="bottom-nav">
+  <button class="nav-btn active" onclick="showTab('averias',this)">
+    <span class="nav-icon">⚠</span>Averías
+  </button>
+  <button class="nav-btn" onclick="showTab('tareas',this)">
+    <span class="nav-icon">✓</span>Tareas
+  </button>
+  <button class="nav-btn" onclick="showTab('proced',this)">
+    <span class="nav-icon">▶</span>Procesos
+  </button>
+  <button class="nav-btn" onclick="showTab('ref',this)">
+    <span class="nav-icon">★</span>Ref.
+  </button>
+</nav>
+
+<!-- ===== AVERÍAS TAB ===== -->
+<div id="tab-averias" class="page active">
+  <div id="averias-home">
+    <div class="section-grid">
+      <div class="section-card" onclick="showFaultSection('APILADO')">
+        <span class="section-icon">🔩</span>
+        <div class="section-name">Apilado</div>
+        <div class="section-count">29 registros</div>
+      </div>
+      <div class="section-card" onclick="showFaultSection('DESAPILADO')">
+        <span class="section-icon">📦</span>
+        <div class="section-name">Desapilado</div>
+        <div class="section-count">32 registros</div>
+      </div>
+      <div class="section-card" onclick="showFaultSection('AVERIA HORNO Y VIAS')">
+        <span class="section-icon">🔥</span>
+        <div class="section-name">Horno y Vías</div>
+        <div class="section-count">26 registros</div>
+      </div>
+      <div class="section-card" onclick="showFaultSection('FLEJADORA')">
+        <span class="section-icon">🔧</span>
+        <div class="section-name">Flejadora</div>
+        <div class="section-count">14 registros</div>
+      </div>
+      <div class="section-card" onclick="showFaultSection('MOLINO')">
+        <span class="section-icon">⚙</span>
+        <div class="section-name">Molino</div>
+        <div class="section-count">6 registros</div>
+      </div>
+      <div class="section-card" onclick="showFaultSection('TRANSBORDADOR')">
+        <span class="section-icon">🚃</span>
+        <div class="section-name">Transbordador</div>
+        <div class="section-count">3 registros</div>
+      </div>
+      <div class="section-card" onclick="showFaultSection('ASPIRACIÓN')">
+        <span class="section-icon">💨</span>
+        <div class="section-name">Aspiración</div>
+        <div class="section-count">1 registro</div>
+      </div>
+      <div class="section-card" onclick="showFaultSection('SECADERO')">
+        <span class="section-icon">🌡</span>
+        <div class="section-name">Secadero</div>
+        <div class="section-count">1 registro</div>
+      </div>
+      <div class="section-card wide" onclick="showFaultSection('GAS Y CALDERA')">
+        <span class="section-icon">🔆</span>
+        <div class="section-name">Gas y Caldera</div>
+        <div class="section-count">1 registro</div>
+      </div>
+            <div class="section-card wide" onclick="openAddSectionModal()" style="border:2px dashed var(--border);background:transparent;align-items:center;justify-content:center;flex-direction:row;gap:10px;padding:18px">
+        <span style="font-size:32px;color:var(--orange);font-weight:200;line-height:1">+</span>
+        <div class="section-name" style="color:var(--text2)">A&#241;adir apartado</div>
+      </div>
+        <div class="section-count" id="mis-averias-count">0 averías</div>
+      </div>
+    </div>
+  </div>
+  <div id="averias-detail" style="display:none">
+    <div class="page-header">
+      <button class="back-btn" onclick="hideFaultSection()">← Atrás</button>
+      <h2 id="averias-detail-title">–</h2>
+      <span class="badge" id="averias-count">0</span>
+    </div>
+    <div id="averias-list" class="card-list"></div>
+    <button class="mt-fab" id="averias-fab" style="display:none;background:#f97316;box-shadow:0 4px 16px rgba(249,115,22,.45)" onclick="openFaultEditModal(null,-1,-1)">＋</button>
+  </div>
+  <div id="mis-averias-detail" style="display:none">
+    <div class="page-header">
+      <button class="back-btn" onclick="hideMisAverias()">← Atrás</button>
+      <h2>Mis Averías</h2>
+    </div>
+    <div class="mt-filter-row">
+      <button class="mt-filter active-filter" onclick="setAvFilter('todas',this)">Todas</button>
+      <button class="mt-filter" onclick="setAvFilter('abierta',this)">Abiertas</button>
+      <button class="mt-filter" onclick="setAvFilter('en_curso',this)">En curso</button>
+      <button class="mt-filter" onclick="setAvFilter('resuelta',this)">Resueltas</button>
+    </div>
+    <div id="mis-averias-list" style="padding:12px 16px"></div>
+    <button class="mt-fab" style="background:#ef4444;box-shadow:0 4px 16px rgba(239,68,68,.45)" onclick="openAvModal()">＋</button>
+  </div>
+  <div id="fault-detail" style="display:none">
+    <div class="page-header">
+      <button class="back-btn" onclick="hideFaultDetail()">← Atrás</button>
+      <h2 id="fault-detail-section">–</h2>
+    </div>
+    <div id="fault-detail-content"></div>
+  </div>
+  <div id="search-results" style="display:none">
+    <div id="search-results-content"></div>
+  </div>
+</div>
+
+<!-- ===== TAREAS TAB ===== -->
+<div id="tab-tareas" class="page">
+  <div id="tareas-home">
+    <div class="section-grid">
+      <div class="section-card wide" onclick="showTareasSection('reparaciones')">
+        <span class="section-icon">🛠</span>
+        <div class="section-name">Tareas de Reparación</div>
+        <div class="section-count">24 tareas pendientes / realizadas</div>
+      </div>
+      <div class="section-card wide" onclick="showTareasSection('pendientes')">
+        <span class="section-icon">📋</span>
+        <div class="section-name">Pendientes de Realizar</div>
+        <div class="section-count">8 entradas</div>
+      </div>
+      <div class="section-card wide" onclick="showTareasSection('revision')">
+        <span class="section-icon">🔍</span>
+        <div class="section-name">Revisión Periódica</div>
+        <div class="section-count">10 máquinas</div>
+      </div>
+      <div class="section-card wide" onclick="showTareasSection('diarias')">
+        <span class="section-icon">📅</span>
+        <div class="section-name">Tareas Mensuales</div>
+        <div class="section-count">Por semanas</div>
+      </div>
+      <div class="section-card wide" onclick="showTareasSection('carretillas')">
+        <span class="section-icon">🚜</span>
+        <div class="section-name">Carretillas</div>
+        <div class="section-count">Mantenimiento y vencimientos</div>
+      </div>
+      <div class="section-card wide" onclick="showTareasSection('mejoras')">
+        <span class="section-icon">⭐</span>
+        <div class="section-name">Mejoras</div>
+        <div class="section-count">1 entrada</div>
+      </div>
+      <div class="section-card wide" onclick="showTareasSection('pedidos')">
+        <span class="section-icon">📦</span>
+        <div class="section-name">Pedidos y Envíos</div>
+        <div class="section-count">2 entradas</div>
+      </div>
+      <div class="section-card wide" id="mis-tareas-card" onclick="showTareasSection('mis_tareas')" style="border-color:var(--orange);background:linear-gradient(135deg,#1e2235,#25203a)">
+        <span class="section-icon">✏️</span>
+        <div class="section-name" style="color:var(--orange)">Mis Tareas</div>
+        <div class="section-count" id="mis-tareas-count">0 tareas</div>
+      </div>
+    </div>
+  </div>
+  <div id="tareas-detail" style="display:none">
+    <div class="page-header">
+      <button class="back-btn" onclick="hideTareasSection()">← Atrás</button>
+      <h2 id="tareas-detail-title">–</h2>
+    </div>
+    <div id="tareas-list"></div>
+    <button class="mt-fab" id="tareas-fab" style="display:none;background:#f97316;box-shadow:0 4px 16px rgba(249,115,22,.45)" onclick="openTareaEditModal(null,-1,-1)">＋</button>
+  </div>
+  <div id="mis-tareas-detail" style="display:none">
+    <div class="page-header">
+      <button class="back-btn" onclick="hideMisTareas()">← Atrás</button>
+      <h2>Mis Tareas</h2>
+    </div>
+    <div class="mt-filter-row">
+      <button class="mt-filter active-filter" onclick="setFilter('todas',this)">Todas</button>
+      <button class="mt-filter" onclick="setFilter('pendientes',this)">Pendientes</button>
+      <button class="mt-filter" onclick="setFilter('en_curso',this)">En curso</button>
+      <button class="mt-filter" onclick="setFilter('hechas',this)">Hechas</button>
+    </div>
+    <div id="mis-tareas-list" style="padding:12px 16px"></div>
+    <button class="mt-fab" onclick="openAddModal()">＋</button>
+  </div>
+</div>
+
+<!-- ===== PROCEDIMIENTOS TAB ===== -->
+<div id="tab-proced" class="page">
+  <div id="proced-home">
+    <div class="priority-banner">
+      <span style="font-size:20px">⚡</span>
+      <span class="priority-text">Acceso rápido a procedimientos críticos de operación</span>
+    </div>
+    <div class="section-grid">
+      <div class="section-card wide" onclick="showProcedSection('luz')">
+        <span class="section-icon">💡</span>
+        <div class="section-name">Se Va la Luz</div>
+        <div class="section-count">Pasos a seguir tras corte eléctrico</div>
+      </div>
+      <div class="section-card wide" onclick="showProcedSection('arrancar')">
+        <span class="section-icon">🔥</span>
+        <div class="section-name">Arrancar Horno</div>
+        <div class="section-count">Procedimiento completo · 38 pasos</div>
+      </div>
+      <div class="section-card wide" onclick="showProcedSection('horno')">
+        <span class="section-icon">🌡</span>
+        <div class="section-name">Encender Horno (pasos rápidos)</div>
+        <div class="section-count">Encendido · 32 pasos</div>
+      </div>
+      <div class="section-card wide" onclick="showProcedSection('vagonetas')">
+        <span class="section-icon">🚃</span>
+        <div class="section-name">Vagonetas</div>
+        <div class="section-count">Gestión y códigos</div>
+      </div>
+      <div class="section-card wide" onclick="showProcedSection('compresor')">
+        <span class="section-icon">💨</span>
+        <div class="section-name">Cambio de Aceite Compresor</div>
+        <div class="section-count">9 pasos</div>
+      </div>
+    </div>
+  </div>
+  <div id="proced-detail" style="display:none">
+    <div class="page-header">
+      <button class="back-btn" onclick="hideProcedSection()">← Atrás</button>
+      <h2 id="proced-detail-title">–</h2>
+    </div>
+    <div id="proced-list"></div>
+    <button id="proced-fab" class="mt-fab" style="background:#22c55e;box-shadow:0 4px 16px rgba(34,197,94,.45);display:none" onclick="openStepModal(_curProc,-1,-1)">＋</button>
+  </div>
+</div>
+
+<!-- ===== REFERENCIA TAB ===== -->
+<div id="tab-ref" class="page">
+  <div id="ref-home">
+    <div class="section-grid">
+      <div class="section-card wide" onclick="showRefSection('contrasenas')">
+        <span class="section-icon">🔑</span>
+        <div class="section-name">Contraseñas</div>
+        <div class="section-count">5 códigos guardados</div>
+      </div>
+      <div class="section-card wide" onclick="showRefSection('alarmas')">
+        <span class="section-icon">🚨</span>
+        <div class="section-name">Alarmas</div>
+        <div class="section-count">4 alarmas documentadas</div>
+      </div>
+      <div class="section-card wide" onclick="showRefSection('comandos')">
+        <span class="section-icon">⌨</span>
+        <div class="section-name">Comandos MODSOF</div>
+        <div class="section-count">20 atajos de teclado</div>
+      </div>
+      <div class="section-card wide" onclick="showRefSection('notas')">
+        <span class="section-icon">📝</span>
+        <div class="section-name">Notas Importantes</div>
+        <div class="section-count">11 notas técnicas</div>
+      </div>
+    </div>
+  </div>
+  <div id="ref-detail" style="display:none">
+    <div class="page-header">
+      <button class="back-btn" onclick="hideRefSection()">← Atrás</button>
+      <h2 id="ref-detail-title">–</h2>
+    </div>
+    <div id="ref-list"></div>
+    <button id="ref-fab" class="mt-fab" style="background:#6366f1;box-shadow:0 4px 16px rgba(99,102,241,.45);display:none" onclick="openRefModal(null,-1,-1)">＋</button>
+  </div>
+</div>
+
+<script>
+const DATA = {"faults": {"ASPIRACIÓN": [{"maquina": "Cuadro eléctrico", "averia": "Se calienta el fusible", "causa": "Mal contacto o interruptor en mal estado", "reparacion": "Se puentea y se queda sin fusible", "fecha": "2024-05-03 00:00:00", "operario": "Memi"}], "APILADO": [{"maquina": "Pinza Apilado", "averia": "Tira los ladrillos , baja y sube cargada y luego los suelta", "causa": "Cable cortado del sensor de la válvula", "reparacion": "Cambiar un bit abierto por uno cerrado en el contactor y en el programa. Se le pone antes de la válvula en el segmento.", "fecha": "2024-04-23 00:00:00", "operario": "Memi"}, {"maquina": "Prensa 980 H", "averia": "Fuga de aceite por el tapón grande", "causa": "Se ha roto la junta tórica", "reparacion": "Poner venturi un par de horas (hasta que deje de echar aceite) y ponerle su junta.", "fecha": "2024-04-23 00:00:00", "operario": "Ñito"}, {"maquina": "Prensa 980 H", "averia": "Fallo en el llenado del tolvín", "causa": "La sonda se ha movido", "reparacion": "Colocar la sonda y ajustar para que el tubo llene bien.", "fecha": "2024-04-02 00:00:00", "operario": "Memi"}, {"maquina": "Prensa 5", "averia": "Se les cae el transporte y se rompe el variador de velocidad", "causa": "Se le ha roto el transistor al variador", "reparacion": "Poner variador nuevo (El motor está en triángulo )", "fecha": "2024-05-02 00:00:00", "operario": "Memi"}, {"maquina": "Prensa 980 H", "averia": "No calientan las resistencias", "causa": "Puede que se haya cortado la masa, o algún fusible. Llevan una tensión de 50V. y un consumo de 80 A aprox.", "reparacion": "Poner una malla nueva. Revisar fusibles y cableado.", "fecha": "2024-05-03 00:00:00", "operario": "Memi"}, {"maquina": "Prensa 980H", "averia": "Junta tapón del latiguillo de presión del multiplicador", "causa": "", "reparacion": "Poner venturi y ponerle su junta de 41x3", "fecha": "2024-05-07 00:00:00", "operario": "Memi"}, {"maquina": "Prensa  PH 680", "averia": "Junta de la válvula del multiplicador", "causa": "", "reparacion": "Poner junta 41x3", "fecha": "2024-05-07 00:00:00", "operario": "Memi"}, {"maquina": "Prensa PH 680", "averia": "Suena la bomba del deposito del retorno del aceite", "causa": "", "reparacion": "Poner rodamientos del motor. 6201", "fecha": "2024-05-09 00:00:00", "operario": "Memi"}, {"maquina": "Prensa PH 680", "averia": "No va la imantacion", "causa": "Masa no hace contacto o algún cable suelto", "reparacion": "La masa está suelta", "fecha": "2024-05-14 00:00:00", "operario": "Ñito"}, {"maquina": "Prensa 980 H", "averia": "No va la imantacion inferior", "causa": "Algún cable suelto o masa suelta. revisar tensiones en continua y en alterna. entre el 0 y el 50", "reparacion": "Cable del 0 está quemado. (en la resistencia )", "fecha": "2024-05-15 00:00:00", "operario": "Memi"}, {"maquina": "Prensa PH 680", "averia": "No enciende la pantalla", "causa": "Algún fusible fundido", "reparacion": "Revisar fusibles y contactor, a ver si hay corriente.  Se cambia fusible 4ma", "fecha": "2024-05-14 00:00:00", "operario": "Memi"}, {"maquina": "Prensa PH680", "averia": "No va la imantacion inferior", "causa": "Algún micro de la piña", "reparacion": "Sustituir micro con el número 37, no actua", "fecha": "2024-05-15 00:00:00", "operario": "Memi"}, {"maquina": "Pinza apilado", "averia": "La pinza no llega al final para depositar los ladrillos.", "causa": "Algún relé cogido( los del movimiento y frenada son (del autómata) los de abajo del todo a la derecha). ó algún cable está cortado del motor.", "reparacion": "Cable cortado. empalmar con estaño y listo.", "fecha": "2024-05-20 00:00:00", "operario": "Memi"}, {"maquina": "Desgranador", "averia": "El desgranador  abre y cierra", "causa": "Es el micro que se ha movido, del piston grande delgado", "reparacion": "", "fecha": "", "operario": ""}, {"maquina": "Prensa PH680", "averia": "Fusible de la pantalla", "causa": "Fusible fundido el 16", "reparacion": "", "fecha": "2024-05-27 00:00:00", "operario": "Memi"}, {"maquina": "Pinza apilado", "averia": "Se para cargada y no da ninguna alarma", "causa": "Hay que ver la tolerancia de posición", "reparacion": "Subir un poco la tolerancia de posición", "fecha": "2024-05-28 00:00:00", "operario": "Memi"}, {"maquina": "Pinza apilado", "averia": "La pinza sube cargada y hace un movimiento para subir más", "causa": "Pueden variar las velocidades del variador y las cotas de subida.", "reparacion": "Cambiar código 22 del variador subirlo de 4 a 5 y el la pantalla del armario (control de pinza) subirle el cambio de velocidad subiendo, se pone de 75 a 85 y probar", "fecha": "2024-05-28 00:00:00", "operario": "Memi"}, {"maquina": "Pinza Apilado", "averia": "Pistón subida topes de la mesa", "causa": "Pierde presión", "reparacion": "Sustituirlo por uno usado", "fecha": "2024-06-06 00:00:00", "operario": "Memi"}, {"maquina": "Prensa 980 H", "averia": "Poner platos a nivel", "causa": "Apretar arriba es bajar la placa y apretar la tuerca de abajo es subir la placa", "reparacion": "", "fecha": "", "operario": ""}, {"maquina": "Prensa 555 H", "averia": "Sensor de presión. EL QUE REGULA LA PRESIÓN DE LA PRENSA , regula las prensadas. la primera y la segunda.", "causa": "Ha dejado de funcionar, el sensor también tenía una conexión mala.", "reparacion": "Cambiar sensor por uno nuevo de dos hilos que tiene ( el tierra por la señal en el conector). es de 0 a 400 bar.", "fecha": "", "operario": ""}, {"maquina": "Prensa 980 H", "averia": "Fallo  caída platos", "causa": "Puede ser que la posición de la Epesor- pico traversa este mas alto que el freno inicial.", "reparacion": "Poner posición de la Traversa Freno incial mas BAJO que la posición del freno inicial", "fecha": "", "operario": ""}, {"maquina": "Prensa 980 H", "averia": "Se para todo hasta la prensa chica. Dispara el MAGNETOTERMICO GENERAL.", "causa": "Se mira si es por una derivación. En el aparato de Test y Reset (luz roja) Por qué ha saltado un motor en otro lado de la fábrica. Ej. en el molino el ventilador.", "reparacion": "", "fecha": "2024-09-02 00:00:00", "operario": "Memi"}, {"maquina": "Pinza Apilado", "averia": "Se frena y se queda parada", "causa": "El relé se ha quemado", "reparacion": "Sustituir relés de frenada, tanto el de avance como el de bajada", "fecha": "2024-11-18 00:00:00", "operario": "Moises"}, {"maquina": "Pinza Apilado", "averia": "Mesa de programación, pierde aire el pistón del desgranador", "causa": "El retén está desgastado", "reparacion": "Cambiar retén. Cortando el aire en el regulador de presión", "fecha": "2024-12-03 00:00:00", "operario": "Memi"}, {"maquina": "Prensa 555 H", "averia": "Poner juntas al multiplicador", "causa": "Se le ponen las juntas al multiplicador y se le echa el aceite al tanque por la bombita, cerrando una llave grande y abriendo la pequeña que está al lado de donde se conecta la goma", "reparacion": "También se vacía por la misma bomba de llenado solo que metiéndole presión con el aire sobre 6, 7 bares", "fecha": "2025-01-02 00:00:00", "operario": ""}, {"maquina": "", "averia": "VAGONETA", "causa": "La vogoneta ha pasado media como cargada y está descargada", "reparacion": "", "fecha": "", "operario": ""}, {"maquina": "Prensa 555 H", "averia": "El transporte no va bien, porque falla alguna entrada del PLC o el aux del contactor", "causa": "Comprobar relé de la salida que falla y ó hacer un puente en el auxiliar del contactor a ver si es eso.", "reparacion": "", "fecha": "2025-02-04 00:00:00", "operario": ""}, {"maquina": "Prensa 555 H", "averia": "El transporte no va bien, por que falla a la entrada de la mesa de programación del apilado.", "causa": "Cambiar un relé. Viendo que salida es, que era la 223. Se ha mirado en el sywing el programa.", "reparacion": "El contactor es de las correas que ya están en la mesa.", "fecha": "2025-02-06 00:00:00", "operario": "Memi"}, {"maquina": "Impulsor", "averia": "Se rompe la cadena. Iba a tirones", "causa": "Se había desplazado el piñón del motor y se trababa la cadena.", "reparacion": "Poner empalme. / Este motor lleva tres relés grandes , 1 el freno", "fecha": "2025-02-07 00:00:00", "operario": "Lolo"}], "DESAPILADO": [{"maquina": "Pinza Empaquetado", "averia": "Roza en los rodillos", "causa": "Pinza demasiado baja.", "reparacion": "Cambiar la cota de bajada a recoger. Se sube hasta la posición deseada y se le marcan los valores en el encoder (normalmente 63652) . Subir nivel encoder 63669 y se graba en nNIVEL DE RODILLOS", "fecha": "2024-06-05 00:00:00", "operario": "Memi"}, {"maquina": "Liadora de plástico", "averia": "Se le suelta el final de carrera", "causa": "", "reparacion": "Montar bien el final de carrera, por qué se sale el brazo.", "fecha": "2024-04-29 00:00:00", "operario": "Memi"}, {"maquina": "Programación", "averia": "Se separan los ladrillos", "causa": "Puede ser que el motor se quede en dos fases. Puede ser por los rodillos gastados.", "reparacion": "De momento revisar el contactor", "fecha": "2024-05-02 00:00:00", "operario": "Memi"}, {"maquina": "Pinza apilado", "averia": "Da error de sincronismo y se para la pinza", "causa": "Puede ser por la tolerancia. Hay un detector que indica como está la pinza.", "reparacion": "Dice Memi que le cambio la tolerancia y empezó a fallar. Le baja el sensor al medio de la pletina. Previamente baja la pinza en manual hasta la posición que marca el sensor en el programa", "fecha": "2024-05-07 00:00:00", "operario": "Memi"}, {"maquina": "Volteador", "averia": "Se adelantan los ladrillos.", "causa": "Cadenas gastadas y se apoyan en los rodillos", "reparacion": "Cambiar todas las cadenas 30 metros", "fecha": "2024-05-10 00:00:00", "operario": "Memi"}, {"maquina": "Pinza empaquetado", "averia": "Se queda en una posición que no baja ni en auto ni en manual.", "causa": "Puede ser por las fotocélula de abajo.( la de bajada). o algún sensor de arriba de la cadena", "reparacion": "Llega juan y abrimos la pinza a la altura que esté con un palet debajo para depositar los ladrillos. y se soluciona el problema.", "fecha": "2024-05-21 00:00:00", "operario": "Memi"}, {"maquina": "Pinza empaquetado", "averia": "Hace cosas raras se va parando despacio , arranca, para......", "causa": "Se le sube el tiempo a la velocidad subiendo de 85 a 90 ó 95", "reparacion": "Se sube el tiempo de frenada de 85 a 90", "fecha": "2024-05-22 00:00:00", "operario": "Memi"}, {"maquina": "Rodillos de la mesa que sube", "averia": "No pega bien los ladrillos", "causa": "Los rodillos no avanzan más,(motor pequeño)", "reparacion": "Se le quitan las gomas a los rodillos", "fecha": "2024-05-22 00:00:00", "operario": "Memi"}, {"maquina": "Pinza empaquetado", "averia": "No alinea los ladrillos", "causa": "Hay que ajustar el segundo sensor de arriba y el tope", "reparacion": "Ajustar 2 sensor de arriba y el tope", "fecha": "2024-05-28 00:00:00", "operario": "Memi"}, {"maquina": "Pinza empaquetado", "averia": "Se queda parada", "causa": "", "reparacion": "", "fecha": "", "operario": "Memi"}, {"maquina": "Tope Paquete", "averia": "Se queda pillado el contactor", "causa": "El contactor se queda trabado y sigue el tope hacia delante", "reparacion": "Cambiar contactor.", "fecha": "2024-06-18 00:00:00", "operario": "Memi"}, {"maquina": "Impulsor", "averia": "ARRASTRADOR se queda que no hace nada.", "causa": "Puede ser que el contactor no entre (abajo a la derecha) ó que los sensores tengan algo", "reparacion": "( le he dado al contactor y ha funcionado )", "fecha": "2024-08-29 00:00:00", "operario": "Lolo"}, {"maquina": "Pinza Empaquetado", "averia": "Fallo de encoder", "causa": "Cadenas estiradas o destensadas", "reparacion": "Se baja un pelín el sensor de la cadena de arriba.", "fecha": "2024-09-03 00:00:00", "operario": "Memi"}, {"maquina": "Programación", "averia": "Fallan los ladrillos al entrar en el volteador. Están adelantados .", "causa": "Se le dan un poco para adelante a la salida del alineador.", "reparacion": "Dar para adelante a la fotocelula del volteador", "fecha": "2024-09-03 00:00:00", "operario": "Memi"}, {"maquina": "Envolvedora", "averia": "Se pone en manual y pa que libere el freno hay que GIRAR el TERMICO pero con la cadena puesta para después meter la correa", "causa": "", "reparacion": "", "fecha": "2024-08-09 00:00:00", "operario": "Lolo"}, {"maquina": "Alineación", "averia": "Se gira un ladrillo y entra mal al volteador", "causa": "Por qué se le gira un ladrillo", "reparacion": "Dar la vuelta a las tres primeras cadenas", "fecha": "2024-09-03 00:00:00", "operario": "Memi"}, {"maquina": "Pinza Desapilado", "averia": "No sube la pinza", "causa": "Patinan las correas", "reparacion": "Correas en mal estado ó algo hace fuerza y no deja mover la pinza. Se cambian las 4 correas 1587", "fecha": "2024-09-04 00:00:00", "operario": "Memi"}, {"maquina": "Volteador", "averia": "Se paran las cadenas", "causa": "Puede ser que las correas estén malas", "reparacion": "Se cambian las correas spz1162", "fecha": "2024-09-04 00:00:00", "operario": "Memi"}, {"maquina": "Pinza Desapilado", "averia": "No va, se para al momento de darle", "causa": "Puede ser el relé qué activa el variador.", "reparacion": "Cambiar relé qué activa el variador , que es la subida de la pinza", "fecha": "2024-09-04 00:00:00", "operario": "Memi"}, {"maquina": "Alineación", "averia": "No funciona en Automático", "causa": "Ha habido algún fallo del plc o alguna fotocelula", "reparacion": "Dar un paso en manual y ponerlo en Automático, dar otro paso en manual y ponerlo en Automático", "fecha": "2024-10-11 00:00:00", "operario": "Memi"}, {"maquina": "Alineación", "averia": "No abren los topes.", "causa": "Se han movido los detectores de abajo", "reparacion": "Colocarlos en su sitio y apretarlos", "fecha": "2024-10-15 00:00:00", "operario": "Lolo"}, {"maquina": "Alineación", "averia": "BANDAS  la banda 2 se ha desplazado y no va a su sitio", "causa": "El rodillo lateral se ha salido el muelle", "reparacion": "Colocarle el muelle en su sitio, para que el pistón cierre.", "fecha": "2024-10-15 00:00:00", "operario": "Lolo"}, {"maquina": "Programación", "averia": "Se para la cadena y el volteador sigue andando.", "causa": "Correas flojas o se ha bajado la mesa y roza el piñón en la pletina", "reparacion": "Apretar correas ó subir mesa", "fecha": "2024-10-15 00:00:00", "operario": "Lolo"}, {"maquina": "Pinza Desapilado", "averia": "Se queda parda de vez en cuando", "causa": "Puede ser el freno o el relé del freno", "reparacion": "Cambio el relé del freno de avance y retroceso que son los que están debajo del variador", "fecha": "2024-10-20 00:00:00", "operario": "Lolo"}, {"maquina": "Pinza Desapilado", "averia": "Cambiar aceite.", "causa": "Poner cubo bien atrás para que no chorree el aceite", "reparacion": "Resetear la alarma pulsando el botón rojo de paro 10 segundos", "fecha": "2024-10-22 00:00:00", "operario": "Memi"}, {"maquina": "Alineación", "averia": "Calibrar centraje en Materiales", "causa": "Materiales y se le da al material al 22x11 o a starcan y en centraje", "reparacion": "", "fecha": "2024-11-03 00:00:00", "operario": "Lolo"}, {"maquina": "Alineación", "averia": "Ladrillos STARCAM se adelantan entrando en el volteador", "causa": "Pongo a 1070 la alineación de los materiales", "reparacion": "", "fecha": "2024-11-06 00:00:00", "operario": "Lolo"}, {"maquina": "Pinza Desapilado", "averia": "NOTA IMPORTANTE", "causa": "Hay que encender apilado, movimentaciones y ordenador de arriba y darle a maniobra y potencia", "reparacion": "", "fecha": "", "operario": ""}, {"maquina": "Pinza Empaquetado", "averia": "Hace cosas raras, da trancazos. Pone inconcluencia detectores", "causa": "Un detector se ha quedado activado donde no debería.", "reparacion": "Se ha cambiado un detector capacitivo M30 PNP", "fecha": "2025-02-17 00:00:00", "operario": "Lolo"}, {"maquina": "Impulsor", "averia": "No entra la vagona", "causa": "No ha llegado atrás al detector.", "reparacion": "Darle para atrás al arrastrador y poner en automático", "fecha": "2025-03-03 00:00:00", "operario": "Lolo"}, {"maquina": "Tope Paquete", "averia": "Ha roto el tornillo  y no marcha", "causa": "El freno se ha quedado agarrado", "reparacion": "Quitarle el freno al motor", "fecha": "2025-03-03 00:00:00", "operario": "Lolo"}, {"maquina": "Envolvedora", "averia": "Se ha roto la correa", "causa": "Al irse la luz, cuando ha venido, el motor ha seguido girando y la correa se ha quemado. Porque se le habia ido el aire a lo de levantar el palet.", "reparacion": "Cambiar correa A102", "fecha": "2025-03-19 00:00:00", "operario": "Lolo"}], "FLEJADORA": [{"maquina": "Flejadora", "averia": "NO HACE LA SOLDADURA", "causa": "PUEDE SER POR EL TIEMPO DE SOLDADURA", "reparacion": "AJUSTAR EL TIEMPO DE LA SOLDADURA EN LA PANTALLA", "fecha": "", "operario": ""}, {"maquina": "Flejadora", "averia": "NO CENTRA LA SOLDADURA", "causa": "LA GUÍA NO ESTA CENTRADA", "reparacion": "AJUSTAR LA GUÍA DE DENTRO , LA CÓNICA A OJO.", "fecha": "", "operario": ""}, {"maquina": "Flejadora", "averia": "EL FLEJE SE SALE DE LA PRIMERA CURVA DE LANZAMIENTO", "causa": "PUEDE QUE LOS MUELLES DE LAS SUJECIÓN DEL FLEJE ESTÉN FLOJOS", "reparacion": "AJUSTAR LOS MUELLES TORCIENDOLOS UN POQUITO PARA QUE HAGAN PRESIÓN SOBRE LA PLETINA QUE SUJETA EL FLEJE EN LA CURVA.", "fecha": "", "operario": ""}, {"maquina": "Flejadora", "averia": "EL FLEJE SE ESCAPA Y NO TENSA", "causa": "PUEDE QUE TENGA LA UÑA SUCIA O EL MUELLE PARTIDO O FLOJO.", "reparacion": "SACAR LA UÑA, LIMPIARLA Y ECHARLE UN POQUITO DE ACEITE Y, Ó PONER MUELLE NUEVO Ó AJUSTARLO DOBLANDO UN POQUITO", "fecha": "", "operario": ""}, {"maquina": "Flejadora", "averia": "EL FLEJE NO TENSA Ó LA RUEDA NO TENSA LO SUFICIENTE", "causa": "MUELLE DE DENTRO ( EL DEL FONDO) PARTIDO Ó FLOJO", "reparacion": "CON LA RUEDA DE AJUSTE AL MÍNIMO SE PONE Y APRIETA EL MUELLE, HASTA QUE ESTÉ TENSO ( A OJO), LUEGO DAR UN POCO DE TENSIÓN EN LA RUEDA Y FLEJAR PARA PROBAR.", "fecha": "", "operario": ""}, {"maquina": "Flejadora", "averia": "DESAJUSTE DEL FLEJE Ó FLEJE NUEVO NO VA BIEN.", "causa": "PUEDE QUE EL MUELLE DE LAS LLAVES 10 ESTE FLOJO. O SEA UN FLEJE NUEVO DE DIFERENTE TAMAÑO.", "reparacion": "AJUSTAR EL MUELLE CON LAS LLAVES 10 A OJO. Y CON UN FLEJE LANZADO AJUSTAR EL GROSOR CON LAS LLAVES HALLEN.", "fecha": "", "operario": ""}, {"maquina": "Flejadora", "averia": "SE QUEDA LA LUZ AZUL EN EL CABEZAL", "causa": "LAS PUERTAS NO ESTÁN BIEN CERRADAS Ó SUCIEDAD EN LAS CERRADURAS", "reparacion": "CERRAR BIEN LAS PUERTAS Y, Ó LIMPIAR CERRADURAS", "fecha": "", "operario": ""}, {"maquina": "Flejadora", "averia": "Se rompe el muelle de entrada de fleje", "causa": "Es bastante delgado", "reparacion": "Sacarle un trozo de muelle y sigue funcionando", "fecha": "2024-04-28 00:00:00", "operario": "Ruben"}, {"maquina": "Flejadora", "averia": "No aprieta algunos flejed", "causa": "Uña sucia o muelle flojo", "reparacion": "Limpiar la uña engrasar y poner muelle más tenso", "fecha": "2024-05-17 00:00:00", "operario": "Memi"}, {"maquina": "Flejadora", "averia": "SE QUEDA EL CABEZAL APRETADO", "causa": "", "reparacion": "EN LA CASITA HAY UNA OPCIÓN QUE PONE ABRIR CABEZAL O LIBERAR", "fecha": "2024-08-23 00:00:00", "operario": "Ruben"}, {"maquina": "Flejadora", "averia": "No fleja algunos", "causa": "Se le ha roto el muelle de la mandíbula tensora", "reparacion": "Sustituirlo por uno nuevo", "fecha": "2024-10-22 00:00:00", "operario": "Memi"}, {"maquina": "Flejadora", "averia": "No tensa ningún fleje", "causa": "Algún muelle roto", "reparacion": "Sustituir muelle regulador de tensión", "fecha": "2024-11-11 00:00:00", "operario": "Memi"}, {"maquina": "Flejadora", "averia": "No aprieta los flejes", "causa": "Limpiar la uña tensora", "reparacion": "Limpiar quitando el pasador y el muelle", "fecha": "2025-01-02 00:00:00", "operario": "Memi"}, {"maquina": "Flejadora", "averia": "Se ha quedado sin flejar en una posición rara", "causa": "Dar a resetear cabezal 2 veces y revisar muelles", "reparacion": "Poner Muelle en su sititio y hacer reset del cabezal", "fecha": "2025-03-19 00:00:00", "operario": "Lolo"}], "AVERIA HORNO Y VIAS": [{"maquina": "AVERIA HORNO Y VIAS", "averia": "No hace la impulsión", "causa": "Puertas en posición incorrecta, finales de carrera en distinta posición, permisos en el pc apagados, pistón de impusión del foso no hace bien la maniobra.", "reparacion": "Poner puertas en su sitio. Revisar finales de carrera(posible que se hayan quedado trabados), encender los permisos, revisar las palas del pistón.", "fecha": "", "operario": ""}, {"maquina": "AVERIA HORNO Y VIAS", "averia": "Rampa del gas", "causa": "Cuadro del gas apagado,termicos del cuadro encima del secadero bajados,no hay presión de aire, todo esta bien pero sigue sin haber paso de gas para los quemadores.", "reparacion": "Rearmar el automata (quitandole la corriente),rearmar termicos (solo los que no pone ninguna etiqueta), revisar compresor, mirar bien las bollas del paso del gas.", "fecha": "", "operario": ""}, {"maquina": "AVERIA HORNO Y VIAS", "averia": "Alarma tsh", "causa": "No se mueve el trasbordador para sacar la vagona", "reparacion": "La puerta del horno u secadero estan atascadas, se ha quedado alguna vagona en medio de la impulsión o vienen caidos los ladrillos, algun final de carrera pisado u algún sensor.", "fecha": "", "operario": ""}, {"maquina": "AVERIA HORNO Y VIAS", "averia": "Alarma teh", "causa": "El armario electrico se ha quedado sin corriente", "reparacion": "Rearmar termicos (solo los que no pone ninguna etiqueta), revisar compresor, mirar bien las bollas del paso del gas.", "fecha": "", "operario": ""}, {"maquina": "AVERIA HORNO Y VIAS", "averia": "Trasbordador se le queda una vagona marcada en el scada", "causa": "Sensores con algun metal (viruta) encima", "reparacion": "Limpiar sensores, esperar a que cargue otra vagona (sino, cambiar codigo)", "fecha": "", "operario": ""}, {"maquina": "AVERIA HORNO Y VIAS", "averia": "Fallo en via 4  se para la vagoneta antes de cargarla en el trasbordador", "causa": "Puede que haya saltado maniobra y potencia en el cuadro", "reparacion": "Arrancar en el pc maniobra y potencia ó darle a la llave del cuadro, primero a izquierda y luego derecha.", "fecha": "", "operario": ""}, {"maquina": "AVERIA HORNO Y VIAS", "averia": "Puerta del horno no cierra", "causa": "Hay algo encima de la vagoneta.", "reparacion": "Dejar puerta intermedia abierta y ponerle el hierro al sensor. Poner en automático para que saque la vagoneta cocida y cuando termine quitar el hierro de la puerta.", "fecha": "", "operario": ""}, {"maquina": "AVERIA HORNO Y VIAS", "averia": "Fallo de impulsión", "causa": "Pueden ser fallo de los finales de carrera ó los reles de E.S  -  S.S  -  E.H  -  S.H", "reparacion": "Revisar los finales de carrera y colocarlos en su postura.", "fecha": "", "operario": ""}, {"maquina": "AVERIA HORNO Y VIAS", "averia": "Grupo 2 no llega bien", "causa": "Puede ser por qué ha entrado otro material", "reparacion": "Dejarlo unas horas. Revisar quemadores y ó subirle los tiempos de fila", "fecha": "", "operario": ""}, {"maquina": "AVERIA HORNO Y VIAS", "averia": "FOC 2 no arde el mechero 4", "causa": "Barilla de alta rota o mal puesta.", "reparacion": "Cambiamos el trafo pequeño que está en la canaleta roja y ponemos la Barilla de alta en su sitio", "fecha": "", "operario": ""}, {"maquina": "AVERIA HORNO Y VIAS", "averia": "FALLA EL TIRO", "causa": "Tiembla mucho y va a tirones el motor", "reparacion": "Poner el motor directo (entrada y salida del variador ) y cerrar todas las compuertas menos las 2 ultimas. Y cambiar el variador, programandolo", "fecha": "2024-09-10 00:00:00", "operario": "Memi"}, {"maquina": "AVERIA HORNO Y VIAS", "averia": "FALLO DEL FOSO Y TIRO", "causa": "El botón de arranque del armario no funciona (lo ve cuando le da marcha y se activa el bit).", "reparacion": "Cambiar botonera y también programación de arranque para que enciendan con el P.C. en un ciclo de escam ó salte la alarma cuando se pare el variador.", "fecha": "2024-09-19 00:00:00", "operario": "Memi"}, {"maquina": "AVERIA HORNO Y VIAS", "averia": "SACAR VAGONA", "causa": "Hay que sacar una vagona por cualquier cosa (en este caso para echar arena por el tubo del foso)", "reparacion": "Se puede sacar la última pero hay que tener en cuenta las presiones. Subir contavecs a 600 por lo menos cuando estén abiertas las puertas. Para regular la temperatura C16", "fecha": "2024-10-10 00:00:00", "operario": "Memi"}, {"maquina": "AVERIA HORNO Y VIAS", "averia": "SACAR VAGONA", "causa": "Si se quiere sacar una por algo", "reparacion": "Se pone en manual Horno y secadero y sacar la vagona. y hasta que no esté en la vía de depósitado no poner en automático", "fecha": "", "operario": ""}, {"maquina": "AVERIA HORNO Y VIAS", "averia": "Quemador 1 del CGI2 se queda pillado", "causa": "Cambiar el núcleo de la electroválvula", "reparacion": "", "fecha": "2024-11-06 00:00:00", "operario": "Lolo"}, {"maquina": "AVERIA HORNO Y VIAS", "averia": "CALDERA", "causa": "La caldera arranca por debajo de 5 grados y tiene que estar entre 30 y 60 grados", "reparacion": "Arrancar con el botón de encendido y si salta el presostato por quereboca el aire, rearmarlo en el botón blanco", "fecha": "2024-11-12 00:00:00", "operario": "Lolo"}, {"maquina": "AVERIA HORNO Y VIAS", "averia": "Mecheros 1 y 6 no funcionan del grupo 2", "causa": "Puedes ser el núcleo de la electroválvula ó la válvula de gas.", "reparacion": "Se cambian las dos válvulas del gas", "fecha": "2024-11-13 00:00:00", "operario": "Memi"}, {"maquina": "AVERIA HORNO Y VIAS", "averia": "La vagoneta está repetida encima del transbordador", "causa": "cargar y descargar una para que se quite", "reparacion": "", "fecha": "", "operario": ""}, {"maquina": "AVERIA HORNO Y VIAS", "averia": "LA VAGONETA NO SALE DEL HORNO", "causa": "Se ha ido la luz y se ha quedado pillado", "reparacion": "Sacarla en manual", "fecha": "2024-11-14 00:00:00", "operario": "Memi"}, {"maquina": "AVERIA HORNO Y VIAS", "averia": "TERMICO M 13", "causa": "Se le puso un relé de intensidad nuevo. Tiene la señal S45 que está con la señal del relé", "reparacion": "", "fecha": "2024-11-15 00:00:00", "operario": "Memi"}, {"maquina": "AVERIA HORNO Y VIAS", "averia": "PC no hace nada.", "causa": "Se ha quedado pillado", "reparacion": "Reiniciar y ó dar alt F4 y la pantalla de registro hacerla un poco más chica, porque se queda detras", "fecha": "2024-12-10 00:00:00", "operario": "Memi"}, {"maquina": "AVERIA HORNO Y VIAS", "averia": "Ventilador impulsion secadero", "causa": "Correas deterioradas", "reparacion": "Poner correas nuevas", "fecha": "2025-01-14 00:00:00", "operario": "Lolo"}, {"maquina": "AVERIA HORNO Y VIAS", "averia": "FALLO DEL PLC , LA BATERÍA MALA.", "causa": "Hay que meterle el programa nuevo y las consignas que son la MD 3550 LLEVA UNA SEÑAL PARA HACER EL CALCULO CON 1200 que es la señal mas alta del relé sonda de temperatura.", "reparacion": "Poner una tabla visual. Ver el display", "fecha": "2025-02-03 00:00:00", "operario": "Memi"}, {"maquina": "AVERIA HORNO Y VIAS", "averia": "Falla las válvulas que inyectan gas a los mecheros. Se quedan parpadeando.", "causa": "La fuente de alimentación se ha roto", "reparacion": "Hacer calculo de cuanto consume una electroválvula y que son 6 W unos 0,25A cada válvula.  Para conectarle la fuente de alimentación de los otros quemadores", "fecha": "2025-02-17 00:00:00", "operario": "Lolo"}, {"maquina": "AVERIA HORNO Y VIAS", "averia": "No arranca el M13 extracciones secadero", "causa": "Se ha ido la luz y se ha quedado pillado", "reparacion": "Dar en manual al botón de la puerta (Secadero) a marcha y si no va dar en el pc. Y si tampoco va dar a marcha al M6 que está en la otra puerta (Horno)", "fecha": "2025-03-08 00:00:00", "operario": "Lolo"}, {"maquina": "AVERIA HORNO Y VIAS", "averia": "No arranca el FOC 2", "causa": "Corte de luz", "reparacion": "Dar a reset del relé si no bajar y subir el termico QMT 22 o el disyuntor QM2", "fecha": "2025-03-08 00:00:00", "operario": "Lolo"}], "TRANSBORDADOR": [{"maquina": "TRANSBORDADOR", "averia": "Se queda la luz encendida", "causa": "Puede ser que la maniobra no haya entrado", "reparacion": "Ver si ha entrado la maniobra, el contactor que está solo. (el contacto falla). Cambiamos el contacto del contactor", "fecha": "2024-09-17 00:00:00", "operario": "Memi"}, {"maquina": "TRANSBORDADOR", "averia": "Se ha ido la luz varias veces y no marcha", "causa": "Ancla pero no va nada mas , puede que el sensor de carga y descarga se ha quedado pillado", "reparacion": "Ponerle un hierro para que se active", "fecha": "2024-11-09 00:00:00", "operario": "Javi"}, {"maquina": "TRANSBORDADOR", "averia": "Alarma 29 fallo", "causa": "Algún detector se ha quedado clavado", "reparacion": "Llevarlo al final y volver a sacarlo de los sensores y ya poner en automático", "fecha": "2025-01-27 00:00:00", "operario": "Lolo"}], "MOLINO": [{"maquina": "No entra estrella triángulo en el molino", "averia": "Contactor no ha salido o se ha quedado agarrado", "causa": "Contactor agarrado", "reparacion": "Sacarlo y meterlo un poquito con el destornillador", "fecha": "2024-05-17 00:00:00", "operario": "Memi"}, {"maquina": "Ventilador salida del polvo", "averia": "El disyuntor es pequeño y se calienta", "causa": "Es pequeño", "reparacion": "Cambiar el guarda motor por uno de 4/6,3 A", "fecha": "2024-09-16 00:00:00", "operario": "Memi"}, {"maquina": "BOMBA DEL POZO.", "averia": "No sale agua", "causa": "Se ha quedado sin agua ó el nivel se ha quedado pillado.", "reparacion": "Hacer puente entre I y M del pozo quitando los cables actuales y e M conectarlo también a tierra", "fecha": "2024-09-25 00:00:00", "operario": "Memi"}, {"maquina": "PESO", "averia": "No abre el pistón del pegue", "causa": "Puedes ser el pistón. si está cerrado, quitar el tubo de aire de atrás, si no sale aire, es que está bueno. y es la válvula.", "reparacion": "Cambiar válvula de tres vias", "fecha": "2024-11-27 00:00:00", "operario": "Memi"}, {"maquina": "CINTA 11", "averia": "El rodamiento está malo y el motor da unos saltos grandes", "causa": "Rodamiento y eje en mal estado", "reparacion": "De momento se le ha dado en manual al C 11 y tenía una cámara de contacto abierto mala. La hemos cambiado", "fecha": "2024-11-28 00:00:00", "operario": "Memi"}, {"maquina": "Cinta triper 11", "averia": "Rodillo con el eje gastado", "causa": "Rodamiento en mal estado", "reparacion": "Cambiar rodillo", "fecha": "2025-01-17 00:00:00", "operario": "Lolo"}], "SECADERO": [{"maquina": "Fallo PR7", "averia": "El fallo de la sonda PR7. es el M13", "causa": "Se ha ido la luz varias veces y no entra. Ha saltado el TERMICO", "reparacion": "Rearmar térmico. (hemos visto que los contadores si entran pero el motor sigue sin funcionar.) Hay que rearmar el termico", "fecha": "2024-11-14 00:00:00", "operario": "Memi"}], "GAS Y CALDERA": [{"maquina": "Caldera", "averia": "Se le baja la presión del agua", "causa": "Puede que una valvula de seguridad este defectuosa", "reparacion": "", "fecha": "", "operario": ""}]}, "tareas_reparaciones": [{"tarea": "PISTÓN ENTRADA HORNO y SECADERO.", "descripcion": "Hay que poner el pistón casi cerrado para sacar el aceite sacando los latiguillos.", "fecha": "", "operario": ""}, {"tarea": "CAMBIAR RADIADOR DEL GRUPO ELECTRÓGENO Y ACEITE.", "descripcion": "Cambiar aceite y filtros del grupo. 65 litros de aceite y 60 litros de anticongelante.", "fecha": "", "operario": ""}, {"tarea": "HACER CASETA DEL MOLINO.", "descripcion": "Montaje de la caseta.", "fecha": "", "operario": ""}, {"tarea": "RETACAR HORNO.", "descripcion": "Retacar el horno con fibra de vidrio las juntas.", "fecha": "", "operario": ""}, {"tarea": "REPARAR RUEDAS DE LAS VAGONAS", "descripcion": "Se reparan las ruedas de las vagonas.", "fecha": "", "operario": ""}, {"tarea": "CAMBIAR RODAMIENTO AL VENTILADOR DE RECUPERACIÓN", "descripcion": "Cambiamos el rodamiento del motor.", "fecha": "", "operario": ""}, {"tarea": "CAMBIAR RODAMIENTO AL VENTILADOR DEL CONTRAVEC", "descripcion": "Cambamos el rodamiento del motor.", "fecha": "", "operario": ""}, {"tarea": "METER VAGONETAS EN HORNO", "descripcion": "Hacer captura de pantalla de las vagonetas", "fecha": "", "operario": ""}, {"tarea": "Poner variador de velocidad al transporte prensa 5", "descripcion": "Ir a loteado ( shif y carpeta de mantenimiento) poner las vagonas en su lugar con el numero.", "fecha": "", "operario": ""}, {"tarea": "Cambiar pistón de elevación de la prensa 5", "descripcion": "", "fecha": "", "operario": ""}, {"tarea": "Poner rodamientos nuevos al tambor de la cinta alimentación a tolva.", "descripcion": "", "fecha": "", "operario": ""}, {"tarea": "Pinza de desapilado.", "descripcion": "Cambiarle las palas y ponerlas centradas", "fecha": "2027-06-13 00:00:00", "operario": "Memi"}, {"tarea": "Cinta alimentación molino.", "descripcion": "Reparar el rodamiento que va al lado del reductor. Se quita el reductor con el motor puesto con un extractor. 5 horas.", "fecha": "", "operario": ""}, {"tarea": "Cambiar un transformador del FOC2", "descripcion": "El mechero no ardia", "fecha": "", "operario": ""}, {"tarea": "Poner protectores de pantalla apilado", "descripcion": "", "fecha": "", "operario": ""}, {"tarea": "BANDAS DEL MOLINO", "descripcion": "", "fecha": "", "operario": ""}, {"tarea": "CRIBAS", "descripcion": "", "fecha": "2025-01-13 00:00:00", "operario": "Lolo"}, {"tarea": "Poner en marcha la bomba de la charca y repararla", "descripcion": "", "fecha": "", "operario": ""}, {"tarea": "Poner botonera vía 4", "descripcion": "", "fecha": "", "operario": ""}, {"tarea": "Poner rodillo cinta 11 Molino", "descripcion": "", "fecha": "2025-01-17 00:00:00", "operario": "Lolo"}, {"tarea": "Aspirar cuadros eléctricos del apilado y desapilado", "descripcion": "", "fecha": "2025-01-15 00:00:00", "operario": "Lolo"}, {"tarea": "Poner bomba de agua", "descripcion": "Le he cambiado los rodamientos 6306 y sigue igual", "fecha": "2025-01-16 00:00:00", "operario": "Lolo"}, {"tarea": "Poner correas ventilador impulsion secadero. Y revisar correos del horno.", "descripcion": "", "fecha": "2025-01-14 00:00:00", "operario": ""}, {"tarea": "Limpiar zona del gas y echar sal", "descripcion": "2025-02-18 00:00:00", "fecha": "", "operario": ""}], "pendientes": [{"maquina": "DESAPILADO", "averia": "PINZA DE EMPAQUETADO", "reparacion": "PONER TORNILLOS EN EL REDUCTOR DE SUBIDA Y BAJADA DE LA PINZA", "fecha": "2025-02-15 00:00:00", "operario": "Javi", "hecho": "✓"}, {"maquina": "DESAPILADO", "averia": "TUBOS DE AIRE", "reparacion": "Revisados", "fecha": "2025-01-16 00:00:00", "operario": "Lolo", "hecho": "✓"}, {"maquina": "CUADRO CASETA MOLINO", "averia": "MUCHO POLVO", "reparacion": "ASPIRARLO", "fecha": "2025-01-14 00:00:00", "operario": "Lolo", "hecho": "✓"}, {"maquina": "VAGONETAS", "averia": "LATERALES ROTOS", "reparacion": "SOLDAR PLETINAS EN LOS LATERALES", "fecha": "2024-05-07 00:00:00", "operario": "Lolo", "hecho": "✓"}, {"maquina": "VAGONETAS", "averia": "PALAS DELANTERAS", "reparacion": "QUITAR PALAS DELANTERAS", "fecha": "", "operario": "", "hecho": ""}, {"maquina": "Depósito del hidrofugado", "averia": "", "reparacion": "Reparado Con pvc", "fecha": "2024-09-26 00:00:00", "operario": "Memi", "hecho": "✓"}, {"maquina": "Subir techo del gas", "averia": "", "reparacion": "", "fecha": "", "operario": "", "hecho": ""}, {"maquina": "Mandar al de molgas el video de la perdida", "averia": "", "reparacion": "Se les pregúto y digerón que no tenia importancia, que valia más repararlo que el gas que tira", "fecha": "2024-12-02 00:00:00", "operario": "Javi", "hecho": "✓"}], "revision_periodica": [{"maquina": "REVISIÓN TRASBORDADORES", "tarea": "CAMBIOS DE ACEIT SI HACE FALTA , LATIGUILLOS , RUEDAS, RODAMIENTOS, SENSORES, FRENOS."}, {"maquina": "CONTRAVEC", "tarea": "VENTILADORES Y RODAMIENTOS."}, {"maquina": "ENTRADA Y SALIDA DEL HORNO Y SECADERO.", "tarea": "CADENAS (CAMBIAR LA DE LA SALIDA DEL HORNO), FINALES DE CARRERA, PUERTAS, REVISIÓN BOMBA HIDRÁULICA, LATIGUILLOS."}, {"maquina": "CUADROS ELÉCTRICOS", "tarea": "ASPIRAR Y REAPRIETE."}, {"maquina": "RAMPA DEL GAS", "tarea": "REVISAR POSIBLES FUGAS CON JABÓN,"}, {"maquina": "FOC 2", "tarea": "CABLEADO(PONERLE LOS MACARRONES BIEN, LIMPIAR OXIDO TUBERIAS DEL GAS Y PINTARLAS, CAMBIAR LLAVES DEL AIRE Y REVISARLAS QUE ACTUEN BIEN,"}, {"maquina": "GRUPOS 1,2 Y 3", "tarea": "REVISAR VALVULAS Y FUGAS DE GAS."}, {"maquina": "VENTILADORES DE RECUPERACIÓN", "tarea": "RODAMIENTOS, RETENES Y CORREAS (AJUSTE O CAMBIO), LIMPIEZA Y ENGRASE DEL MOTOR."}, {"maquina": "TIRO", "tarea": "LIMPIEZA DE RODAMIENTOS Y REVISIÓN GENERAL."}, {"maquina": "COMPRESOR CHICO (AZUL GAS)", "tarea": "PURGAR DE VEZ EN CUANDO Y REVISAR ACEITE"}], "tareas_diarias": {"PRIMERA SEMANA": [], "SEGUNDA SEMANA": [], "TERCERA SEMANA": [], "CUARTA SEMANA": ["Observaciones ó incidencias:"]}, "se_va_luz": [{"paso": "Esperar que se encienda todo", "detalle": "Extracciones, contravec ect"}, {"paso": "Ver variadores", "detalle": "Sino arrancan dar al reset"}, {"paso": "Ver los cuadros eléctricos", "detalle": "Si hay algun termico ó diferencial bajado"}, {"paso": "Revisar si encienden el FOC2 y los grupos", "detalle": "Sino han arrancado dar a encender"}, {"paso": "Ver rampa del gas", "detalle": "Activarla en el cuadro de fuera y darle a la válvula despacio hacia arriba, comprobar que funcionan los mecheros."}, {"paso": "Revisar SCADA del ordenador", "detalle": "Si hay fallo de vagonetas: ir a vagonetas y encender Marcha Maniobra y Marcha Potencia"}, {"paso": "Mirar los permisos si están activados", "detalle": "En Materiales – Materiales 2 y activar permisos"}, {"paso": "Para activar el MODSOF", "detalle": "Dar a CPU-RED y ya se conecta con las otras CPU"}], "alarmas": [{"alarma": "Alarma 31", "descripcion": "Vagoneta en poscamara de horno (hay que sacarla en manual si no va en automático ) sensor del impulsor se ha quedado pisado"}, {"alarma": "Alarma 58", "descripcion": "Salida secadero, el detector puerta salida el que detecta que la cadena está sujeta a la puerta."}, {"alarma": "Alarma 53", "descripcion": "Del cuadro movimentacion , eso es el sensor de la cadena de la puerta del secadero la intermedia"}, {"alarma": "Alarma 61", "descripcion": "El arrastrador vía 4 patina"}], "vagonetas": [{"titulo": "Sacar vagoneta", "descripcion": "Se pone en manual Horno y Secadero y hasta que no esta en la vía que queremos llevarla no se pone en Automático", "detalle": "Revisar los permisos en el SCADA del PC"}, {"titulo": "Cambiar vagonetas Ej: de V4 a V1", "descripcion": "1: quitar flecha azul. 2: Pulsar A3 a A1 verde.3: Pulsar A1 cocido 4: Poner a cero A5 V5 para no meter vagonetas", "detalle": "Mirar foto. ESTO CUANDO ARRANCA EL HORNO. Para que entren las vagonetas verdes en la vía 1 por la zona del secadero poner TSH A 1 PULMON DE VERDE Y A1 V1 MODO CABESTANTE"}, {"titulo": "INTRODUCCIÓN DE CÓDIGOS", "descripcion": "Para poder cambiar un código hay que entrar en Mantenimiento con el sihf", "detalle": ""}, {"titulo": "Sacar vagoneta del secadero", "descripcion": "En Mantenimiento/loteado y se borra la fecha y la hora del la vagoneta.", "detalle": "Luego hay que correr todas las vagonetas de sitio, ponerlas todas una mas adelante (eso se hace en el numero de la vagoneta."}, {"titulo": "HA HABIDO UN FALLO DE CODIGO EN LA VAGONA", "descripcion": "Entrar en el SCADA y dar a cambiar código poniendo la contraseña 1277 y se le pone el código que pertenece", "detalle": ""}, {"titulo": "Si no quieren pasar vagonetas cocidas al desapilado poner a 0 (en la linea verde A4V5 pincha ahí )", "descripcion": "", "detalle": ""}], "arrancar_horno": [{"paso": "DEBAJO DE I1 PONER LA 94 esto es para el arranque de 4/02/2025", "descripcion": "Poner todos los cuadros en marcha, todos con corriente Encender ordenador y contar las vagonetas hasta el I1 Poner en el pc Meter vagonetas en el horno y poner las movimentaciones en automático Poner el horno y los transbordadores en automático Poner vía 4 en auto . Parar de meter vagonas en la 18 sin que llegue ha hacer la impulsión poniendo la entrada del horno en manual Encender el el cuadro del horno. y ver si está comunicando bien y transmitiendo las temperaturas. SI NO, PUES METERLE EL PROGRAMA"}, {"paso": "1", "descripcion": "Poner compresor pequeño"}, {"paso": "2", "descripcion": "Apuntar gas"}, {"paso": "3", "descripcion": "Abrir tanque de gas (las llaves) y abrir las válvulas pequeñas cerrando las llaves y tirando de las válvulas hacia abajo y abrirlas. Abrir llaves de baypas de la central del gas. Primero 1 y su válvula y luego la otra y su válvula y encender cuadro del gas que esta fuera en la pared (el pequeño)"}, {"paso": "4", "descripcion": "Cambiar tiro para que no arranque cada día y arrancarlo a 250 rpm. Esto hacerlo en el variador de frecuencia, dándole a la flecha y en B1-1 ponerlo a 01 y probar dándole a marcha. Cambiar en el programa del DOSBox las líneas descritas más abajo para que no se pare a la hora."}, {"paso": "5", "descripcion": "Poner el termico de la alarma de los mecheros CLA. Encender cuadro del gas (encima del horno) y activar válvulas (abriéndolas despacio)"}, {"paso": "6", "descripcion": "Vajar puertas del horno en manual"}, {"paso": "7", "descripcion": "Poner grupo en automático y la red también"}, {"paso": "8", "descripcion": "TIRO Para hacer comunicación con los PLC,s hay que abrir el Emulador DOSBox en Linux Dar en la parte superior Transfer (file to plc) y ahí ir a: Poner en el PLC la linea 433 hacer puente y 444 (creo) quitar la linea. en el MODSOF"}, {"paso": "9", "descripcion": "Las vagonetas de la vía 1 se pueden sacar, dándole en manual para atrás y en manual para adelante siempre estando el arrastrador contrario en el final con su sensor"}, {"paso": "10", "descripcion": "Encender FOC 2 en el cuadro (dentro de la caseta) y  meter mecheros para encenderlos."}, {"paso": "11", "descripcion": "Regular válvulas (llaves de gas)  según vaya subiendo la temperatura. Las válvulas de entrada, la general debería encenderse los relés K907 y K 904 esto en el cuadro de dentro. y en el de fuera el K8 (cuadro botonera quemadores)"}, {"paso": "12", "descripcion": "Cuando pase de 700 º encender Foso a unas 500 rpm. Y ponerlo en Automático."}, {"paso": "13", "descripcion": "Poner el n.º de impulsiones a 12 en la pantalla del PC que en realidad son 6 ( encima de la linea azul del trasbordador encima de cambiar valores, con la contra 10. Poner bien el orden de las vagonetas. En Acceso directo a FIX con Shift en loteado y en Regulación. (NO BORRAR NADA DE REGULACIÓN ). Poner la fecha y la hora siguiente de la última vagona. También quitar fecha y hora de la salida del horno en loteado desde la que está debajo del grupo 1 ( I1 ) Suelen ser 18 en el horno y tres fuera de reserva Poner vagoneta en la entrada del horno en semi, y poner trasbordador en la salida del horno."}, {"paso": "14", "descripcion": "Poner el horno en Automático cuando se encienda el foso (manuales 2)."}, {"paso": "15", "descripcion": "Poner puertas en automático las del horno primero la de salida y luego entrada y estar pendiente si hace la primera impulsión, sino hacerlo manual y después probar dejando en automático a ver si hace las otras impulsiónes"}, {"paso": "16", "descripcion": "Cuando llegue el horno a unos 950 º aprox. y este estabilizado unas 3 ó  4 horas . Meter una vagona para que vaya la temperatura para el grupo CGP1 y así coger temperatura para poderlo encender cuando llegue a unos 650 º ( para hacer que la vagona vaya hacia delante se hace una impulsión (cambiar código – poner contraseña (10) y darle al SET)."}, {"paso": "18", "descripcion": "Meter el grupo CGP1  y abrir el aire para que no se quemen. Con el gas cerrado y  con la consigna por debajo de la temp real y luego abrir gas y subirle la consigna. 980º para que arranque. Esto lleva en el cuadro electrico unos reles que a 55 ciclos tienen que verse 3 ó 4 encendidos.Y las valvulas del grupo van alimentadas con una fuente de 24v"}, {"paso": "19", "descripcion": "Poner solo un lado del grupo CGP1 ( pinchando encima de las filas donde se ven las temperaturas del horno en el PC ponerlo a 15 la fila. la fila 1 y ciclo superior a 50 cuando ya haga 3 impulsiones poner la fila superior a 15"}, {"paso": "20", "descripcion": "Se van metiendo vagonetas (reservadas) cuando ya se quede estancada la temperatura. En unos 930º y la parte de detrás del grupo1 se quede mas fria (naranja) (mas ó menos cada hora ó bien mirar registros de otros años)"}, {"paso": "21", "descripcion": "Dejar vías ya en automático y ponerlas para que vayan las vagonetas en su orden.  La via 1 tiene que estar el arrastrador que las empuja al contrario atrás del todo y dejar en manual."}, {"paso": "22", "descripcion": "Poner en marcha el secadero. Extracción, recirculadores y recuperación. Poner a 55 el ciclo superior y las fila 1 a 15 cuando arranque y la fila 2 cuando arranque en las siguientes impulsiones también poner a 15 y poner consigna del FOC 2 a 980 º y el grupo 1 a 970 º Ciclo inferior y alarma inferior a 10"}, {"paso": "23", "descripcion": "Ir haciendo impulsiones cuando la parte trasera del grupo 1 se vaya enfriando así más naranja"}, {"paso": "24", "descripcion": "Cuando ya meta una vogona del secadero en el horno poner la señal del PC del DOXSof Una vez que se metan las tres vagonas de reserva EN EL DOSBox cambiar la linea vertical Alt V  . ( En Online TEH SEG 10 TEMPORIZADOR ) y poner linea horizontal en Shift ="}, {"paso": "25", "descripcion": "Poner tiro a 300 rpm y dejar en manual."}, {"paso": "26", "descripcion": "Arrancar el Motor Ventilador Recuperación, Motores extracción Secadero (este poner en Automático ) Reg Motorizado Recuperación, Reg Motorizado Cajón Mezcla. Y poner en Manuales 2 El horno y secadero en automático"}, {"paso": "27", "descripcion": "Cuando el CGP1 está por encima de 800 º poner en marcha el secadero y ponerlo  a 200. Ponerlo en automático y se encienden los ventiladores 5, 17 y 19."}, {"paso": "28", "descripcion": "Ir poniendo las señales del archivo de excel, (está en la carpeta de Memi en Copias-Agosto)  cada segmento bien puesto( conexionar en el programa)"}, {"paso": "29", "descripcion": "Ir haciendo impulsiones cuando el FOC2 llegue a la temperatura máxima asignada. más o menos en 930 hacer otra impulsión hasta que se metan las tres vagonas hacerlo el set en manual"}, {"paso": "30", "descripcion": "Sacar vagonetas vacias de la vía 1 pa que den la vuelta y poner vía 4 en automático."}, {"paso": "32", "descripcion": "En la vía verde entrar con el ratón dar a CONT. VAG.  y en contador de vagonetas traseras poner las vagonas que haya en la vía. ejemplo 34 para que se vaya llevando de una en una"}, {"paso": "33", "descripcion": "MODO TSH poner los 2 y TSH de a 6 a a 4 y TEH ponerlo a de a 3 a a 1 verde"}, {"paso": "34", "descripcion": "Poner FOC 2 A 960, UNAS HORAS DESPUES ó  al día siguiente A 940 esto la consigna"}, {"paso": "35", "descripcion": "[ ] Encender contravec en el cuadro cuando ha pasado la Temp de enfriamiento de 350* y ponerlos en automático"}, {"paso": "36", "descripcion": "Cuando pase un día o dos y el grupo 2 llegue a 900 Meter los mecheros, poner la consigna por debajo para que no pite la alarma y encender,poner la consigna en 980 para que empiece a meter gas con la llave del gas abierta. Ciclo superior 50 y fila 1 y fila 2 en 15 al principio luego se puede bajar a 12 ó 10.  Poner GP5 Presión Zona Cocción a 12. Cuando se pone el grupo 2 hay que estar pendiente de las temperaturas."}, {"paso": "37", "descripcion": "Térmico ventiladores cuadro encima del ordenador (puerta del secadero)"}, {"paso": "38", "descripcion": "Poner tiro en Automático y consigna a 125 DEBAJO DE I1 PONER LA  VAGONETA DE ARRANQUE DEL HORNO EJ. LA 94 FUE EL 04/02/2025 Poner todos los cuadros en marcha, todos con corriente"}], "notas": [{"titulo": "VAGONA REPETIDA", "descripcion": "VAGONA REPETIDA: Dar SHIFT y pinchar en Mantenimiento y seguido al 2 botón open"}, {"titulo": "BIT DE FALLOS EN", "descripcion": "BIT DE FALLOS EN : (TE VISTO) Te vas al programa del scada fix 32 le das a abrir. Arriba open Apps  Quick draw. para buscar la variable le das Apps y file open y abres el archivo que quieras para modificarlo"}, {"titulo": "AVERIGUAR DIRECCIONES EN EL ESCADA(pantalla del horno) Con el FIX32 Pulsas encima del botón y te dice una dirección - luego on down- y te dice la dirección - luego te vas a APPS -database Builder- database, open y vas al nombre que ponía en on down ó on Up según corresponda. Y te dice la dirección donde empieza el bit. ejemplo", "descripcion": "AVERIGUAR DIRECCIONES EN EL ESCADA(pantalla del horno) Con el FIX32 Pulsas encima del botón y te dice una dirección - luego on down- y te dice la dirección - luego te vas a APPS -database Builder- database, open y vas al nombre que ponía en on down ó on Up según corresponda. Y te dice la dirección donde empieza el bit. ejemplo: 40157:0 que en el MODSOF es 400157.0 que sería (si la traspasa) el BLKM 801 por ejemplo y te vas a Utilyti- Symbol Table (alt F1) y buscas el 801 y luego sigues buscando hasta el F42 por ejemplo y te dice que es exactamente."}, {"titulo": "COMPROBAR MOTOR", "descripcion": "COMPROBAR MOTOR : Se pone en 200 y se prueban las fases a ver si están derivadas. Conectarlo y medir fases"}, {"titulo": "CAMBIAR ALGO EN LA PANTALLA DEL ESCADA", "descripcion": "CAMBIAR ALGO EN LA PANTALLA DEL ESCADA: Se cambia lo que sea y se tiene que pasar la carpeta entera del PIC"}, {"titulo": "ACCESO DIRECTO A SCU", "descripcion": "ACCESO DIRECTO A SCU: Es para ver (el fallo del \"te visto\" del escada) ver donde se posicionan los PLCs"}, {"titulo": "Detectores de presencia de las vagonetas, son libr", "descripcion": "Detectores de presencia de las vagonetas, son libres de potencial y van con un relé al los cuadros de las vías (que son los del transbordador ) y cuando se avería uno lo pone de los verdes que son PNP y lo conecta al contacto cerrado del mismo relé y luego directo al PLC"}, {"titulo": "Fotocélula (las que reflejan en el espejo) las NPN", "descripcion": "Fotocélula (las que reflejan en el espejo) las NPN son las que un lado de la bobina es Positivo Dejo foto de un NPN"}, {"titulo": "SCADA , la pantalla de registro se ve la otra pant", "descripcion": "SCADA , la pantalla de registro se ve la otra pantalla, se le da arriba para acerlo más chica"}, {"titulo": "DOSBox para cambiar los ciclos pulsar control F11 ", "descripcion": "DOSBox para cambiar los ciclos pulsar control F11  ó F12"}, {"titulo": "PLC HORNO los valores del foc 2 son temperatura in", "descripcion": "PLC HORNO los valores del foc 2 son temperatura inf. 0 (para que arranque) temp. super. 40 y de seguridad 10. Los demás valores hay que verlos ( creo que en consigna 980 y alarma inferior 20)"}], "comandos": [{"tecla": "ALT + ENTER", "accion": "PANTALLA GRANDE"}, {"tecla": "F1", "accion": "AYUDA COMANDOS"}, {"tecla": "ALT + F2", "accion": "CAMBIAR BIT DE POSICIÓN"}, {"tecla": "ALT + F3", "accion": "COPIAR"}, {"tecla": "ALT + F4", "accion": "ELIMINAR"}, {"tecla": "ALT + F5", "accion": "PEGAR"}, {"tecla": "ALT + F7", "accion": "BUSCAR"}, {"tecla": "ALT + F8", "accion": "BUSCAR SIGUIENTE"}, {"tecla": "ALT + F9", "accion": "BUSCAR ANTERIOR"}, {"tecla": "SHIFT + 2", "accion": "PONER UN BIT"}, {"tecla": "SHIFT + 7 ó N", "accion": "PONER BIT NEGADO"}, {"tecla": "SHIFT + 8", "accion": "PONER UNA SALIDA"}, {"tecla": "ALT + L", "accion": "VER LA ETIQUETAS DE REDES Y SEGMENTOS"}, {"tecla": "ALT + P", "accion": "Poner un pulso"}, {"tecla": "SHIFT + *", "accion": "Cambiar o poner comentarios . Dar a control enter para validar"}, {"tecla": "ALT + V", "accion": "Linea abajo"}, {"tecla": "Tabulador", "accion": "Para ir a la linea de herramientas de arriba"}, {"tecla": "Tabulador cuando esté encima del título del segmento sale Network list y dar a intro + Para entrar dentro del segmento, seleccionar o dar a la flecha arriba y asterisco ✳️", "accion": "VER EL NOMBRE DE LOS SEGMENTOS"}, {"tecla": "Flecha arriba más asterisco y le damos a la tecla que pone: ej. <D>", "accion": "EDITAR COMENTARIO DEL BIT"}, {"tecla": "En Network", "accion": "PONER UN SEGMENTO NUEVO DELANTE Ó DETRÁS"}], "contrasenas": [{"descripcion": "Ver fallos", "codigo": "1277"}, {"descripcion": "Ordenador de mesa", "codigo": "12771277"}, {"descripcion": "Flejadora", "codigo": "2903"}, {"descripcion": "Fle. Mantenimiento", "codigo": "7225"}, {"descripcion": "Cambiar valores (para impulsiones)", "codigo": "10"}], "compresor_pasos": [{"paso": "1", "descripcion": "ARRANCAR AZUL Y ESPERAR A QUE SE ESTABILICA."}, {"paso": "2", "descripcion": "SOPLARLO Y LIMPIARLO POR DENTRO, FUERA Y LAVAR FILTRO."}, {"paso": "3", "descripcion": "METER PRESIÓN ( CREO QUE HAY QUE ARRANCAR EL COMPRESOR UN MOMENTO) CON LA LLAVE PEQUEÑA CERRADA (  ESTA EN EL MANGUITO NEGRO DE DETRÁS)"}, {"paso": "4", "descripcion": "CERRAR LLAVE GRANDE DE ATRÁS Y VACIAR ACEITE DEL TUBO DE ARRIBA, FILTRO Y DEL DEPOSITO DE EXPANSIÓN."}, {"paso": "5", "descripcion": "QUITAR TODOS LOS TUBOS."}, {"paso": "6", "descripcion": "QUITAR TORNILLOS Y FILTRO INTERIOR, A CONTINUACIÓN RELLENAR  HASTA CUANDO EMPIEZA LO NARANJA CON ACEITE ADECUADO (AR 46)."}, {"paso": "7", "descripcion": "PONER FILTRO Y TORNILLOS E IR APRETANDO LOS TRONILLOS EN CRUZ POCO A POCO."}, {"paso": "8", "descripcion": "ABRIR LLAVES QUE SE HAYAN ABIERTO Y CERRAR LAS QUE ESTÉN ABIERTAS, PARA SU PUESTA EN MARCHA."}, {"paso": "9", "descripcion": "RESETEAR LAS HORAS: DEJANDO PULSADO Y PONER CONTRASEÑA (BASIC)"}], "compresor_averias": [{"maquina": "AMARILLO", "averia": "NO ARRANCA", "causa": "NO LLEGA CORRIENTE", "reparacion": "REARMAR TERMICO O DAR AL DISYUNTOR DEL CONTACTOR (BOTÓN PEQUEÑO AZUL).", "fecha": "", "operario": ""}], "carretillas": [{"maquina": "NISSAN", "cambio": "Cambiada aceite y filtro a los 990 por el técnico de la Nissan", "fecha": "2023-08-11 00:00:00", "operario": "Tecnico Nissan", "proximo": "Cambiar a los 1500 h. ú 17/02/2025", "vencimiento": "2026-02-20 00:00:00", "estado": ""}, {"maquina": "", "cambio": "Cambiada aceite a las 1493 h. 15w40  filtro aceite y filtro gasoil", "fecha": "2025-02-20 00:00:00", "operario": "Lolo", "proximo": "Cambiar a las 1990 h ú 20/02/2026", "vencimiento": "", "estado": ""}, {"maquina": "TOYOTA", "cambio": "Cambia aceite y filtro más filtros de aire a las 5904 h.", "fecha": "2025-02-03 00:00:00", "operario": "Jesus y Jose A.", "proximo": "Cambiar a los 6300 h. ú 28/11/2025", "vencimiento": "2025-11-28 00:00:00", "estado": "VENCIDO"}], "mejoras": [{"maquina": "Encima carga baldosas", "mejora": "Poner focos led", "fecha": "2025-01-20 00:00:00", "operario": "Lolo"}], "horno_encendido": [{"paso": "1", "descripcion": "[V] Poner compresor"}, {"paso": "2", "descripcion": "[V] Apuntar gas"}, {"paso": "3", "descripcion": "[V] Abrir tanques, y válvulas pequeñas"}, {"paso": "4", "descripcion": "[V] Abrir válvula del cuadro pequeño de la pared"}, {"paso": "5", "descripcion": "[V] Cambiar tiro y arrancarlo"}, {"paso": "6", "descripcion": "[V] Encender cuadro gas y activar válvulas"}, {"paso": "7", "descripcion": "[V] Encender grupo 2 y mecheros"}, {"paso": "8", "descripcion": "[V] Regular válvulas según vaya subiendo la temperatura"}, {"paso": "9", "descripcion": "[V] Cuando pase de 700 grados encender foso a unos 500 rpm y ponerlo en automático"}, {"paso": "10", "descripcion": "[V] Poner el horno ya en automático cuando se encienda el foso. (Manuales 2)"}, {"paso": "11", "descripcion": "[V] Meter vagona"}, {"paso": "12", "descripcion": "[V] Luego en set se hace las impulsiones"}, {"paso": "13", "descripcion": "[V] Hasta que llegue a 650 o más el CG1 Para que echen gas"}, {"paso": "14", "descripcion": "[V] Se van metiendo las vagonas que se quedan reservadas, (3)"}, {"paso": "15", "descripcion": "[V] Poner solo un lateral del CG1 (pinchando encima en filas  se pone unos 12) y cuando quieras encender el otro lado poner otros 12)"}, {"paso": "16", "descripcion": "[V] Luego poner a 55 el ciclo superior"}, {"paso": "17", "descripcion": "[V] Poner consigna del foc 1 y 2 a 940 y 960"}, {"paso": "18", "descripcion": "[V] Poner tiro a 300 rpm y dejar en manual"}, {"paso": "19", "descripcion": "Ponerlo en automático y se encienden los ventiladores 5, 17 y 19"}, {"paso": "20", "descripcion": "[V] Cuando el CGP1 está por encima de 800 g, poner en marcha el secadero."}, {"paso": "21", "descripcion": "[V] Ir poniendo las señales del archivo de Excel . Cada segmento bien puesto( conexionar lo en el programa)"}, {"paso": "22", "descripcion": "[V] Ir haciendo impulsiones cuando el foco 2 llegue a la temperatura máxima"}, {"paso": "23", "descripcion": "[ ] Poner en marcha el CGI2 EN EL CUADRO"}, {"paso": "24", "descripcion": "[ ] EL SCADA se cambia en el pc en FIX DRAW"}, {"paso": "25", "descripcion": "[ ] Poner a 16 impulsiones"}, {"paso": "26", "descripcion": "[ ] Meter grupo 2 CGI2 PONERLO A 970 FILAS A 10 CICLO A 50 Y ALARMA INFERIOR A 20"}, {"paso": "27", "descripcion": "[ ] Subir tiro a 400 y seguir dejándolo en manual"}, {"paso": "28", "descripcion": "[ ] Subir a 500 el tiro y dejarlo en manual. Aún está frío . Por lo menos hasta que llegue a 120*-130*"}, {"paso": "29", "descripcion": "[ ] La Temp ENF2. Tiene que subir por lo menos hasta los 350*"}, {"paso": "30", "descripcion": "[ ] Encender contravec en el cuadro cuando ha pasado la Temp de enfriamiento de 350* y ponerlos en automático"}, {"paso": "31", "descripcion": "[ ] Reg. Motorizado Recuperación ponerlo en Automático cuando se ponen los contravec y poner consigna a 400 y poner consigna del tiro a 120"}, {"paso": "32", "descripcion": "[ ] En el Modsof la salida con una (L) significa que se queda activa cuando se corta la corriente."}], "horno_parada": [], "pedidos": [{"material": "Se lleva rodillo de la cinta tripier a Danalu", "operario": "Javi", "fecha_entrega": "2025-01-27 00:00:00", "fecha_llegada": "2025-03-06 00:00:00", "quien": "Lolo"}, {"material": "Se lleva reductor treico y bomba de agua a Danalu", "operario": "Lolo", "fecha_entrega": "2025-03-06 00:00:00", "fecha_llegada": "", "quien": ""}]};
+
+let currentFaultSection = null;
+let currentTab = 'averias';
+
+function showTab(tab, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  btn.classList.add('active');
+  currentTab = tab;
+  ['averias-fab','tareas-fab','proced-fab','ref-fab'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.style.display='none';
+  });
+  clearSearch();
+}
+
+function clearSearch() {
+  document.getElementById('search').value = '';
+  document.getElementById('search-results').style.display = 'none';
+  document.getElementById('averias-home').style.display = '';
+}
+
+// ===== AVERÍAS =====
+function showFaultSection(name) {
+  currentFaultSection = name;
+  const key = name.trim();
+  const records = DATA.faults[key] || DATA.faults[key + ' '] || [];
+  document.getElementById('averias-home').style.display = 'none';
+  document.getElementById('averias-detail').style.display = '';
+  document.getElementById('fault-detail').style.display = 'none';
+  document.getElementById('averias-detail-title').textContent = name;
+  document.getElementById('averias-count').textContent = records.length;
+  renderFaultList(records, 'averias-list');
+}
+
+function renderFaultList(records, containerId) {
+  const el = document.getElementById(containerId);
+  if (!records.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">📭</div>Sin registros</div>'; return; }
+  el.innerHTML = records.map((r, i) => `
+    <div class="fault-card" onclick="showFaultDetail(${JSON.stringify(r).replace(/"/g,'&quot;')})">
+      <div class="fault-card-header">
+        <div class="fault-title">${r.averia || r.tarea || '–'}</div>
+        <div class="fault-meta">
+          ${r.maquina ? `<span class="tag tag-machine">${r.maquina}</span>` : ''}
+          ${r.fecha && r.fecha !== '' ? `<span class="tag tag-date">${r.fecha.split('T')[0].split(' ')[0]}</span>` : ''}
+          ${r.operario && r.operario !== '' ? `<span class="tag tag-op">${r.operario}</span>` : ''}
+          ${r.hecho === '✓' ? `<span class="tag tag-done">✓ Hecho</span>` : ''}
+          <span class="chevron">›</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function showFaultDetail(r) {
+  document.getElementById('averias-detail').style.display = 'none';
+  document.getElementById('fault-detail').style.display = '';
+  document.getElementById('fault-detail-section').textContent = r.maquina || currentFaultSection || '–';
+  const content = document.getElementById('fault-detail-content');
+  const fields = [
+    ['Avería / Problema', r.averia || r.tarea],
+    ['Posible Causa', r.causa || r.descripcion],
+    ['Reparación / Solución', r.reparacion || r.solucion],
+    ['Fecha', r.fecha ? r.fecha.split('T')[0].split(' ')[0] : ''],
+    ['Operario', r.operario],
+    ['Notas adicionales', r.detalle],
+  ];
+  content.innerHTML = fields.filter(f => f[1] && f[1].trim()).map(f => `
+    <div class="detail-section">
+      <div class="detail-label">${f[0]}</div>
+      <div class="detail-text">${f[1]}</div>
+    </div>
+  `).join('');
+}
+
+function hideFaultDetail() {
+  document.getElementById('fault-detail').style.display = 'none';
+  document.getElementById('averias-detail').style.display = '';
+}
+
+function hideFaultSection() {
+  document.getElementById('averias-detail').style.display = 'none';
+  document.getElementById('averias-home').style.display = '';
+  document.getElementById('fault-detail').style.display = 'none';
+}
+
+// ===== TAREAS =====
+function showTareasSection(type) {
+  if (type === 'mis_tareas') {
+    document.getElementById('tareas-home').style.display = 'none';
+    document.getElementById('mis-tareas-detail').style.display = '';
+    taskFilter = 'todas';
+    document.querySelectorAll('.mt-filter').forEach((b,i) => b.classList.toggle('active-filter', i === 0));
+    renderMisTareas();
+    return;
+  }
+  document.getElementById('tareas-home').style.display = 'none';
+  document.getElementById('tareas-detail').style.display = '';
+  const titles = {
+    reparaciones:'Tareas de Reparación', pendientes:'Pendientes de Realizar',
+    revision:'Revisión Periódica', diarias:'Tareas Mensuales',
+    carretillas:'Carretillas', mejoras:'Mejoras', pedidos:'Pedidos y Envíos'
+  };
+  document.getElementById('tareas-detail-title').textContent = titles[type] || type;
+  const el = document.getElementById('tareas-list');
+  
+  if (type === 'reparaciones') {
+    el.innerHTML = '<div class="card-list">' + DATA.tareas_reparaciones.map(r => `
+      <div class="fault-card" onclick="showFaultDetail(${JSON.stringify(r).replace(/"/g,'&quot;')})">
+        <div class="fault-card-header">
+          <div class="fault-title">${r.tarea}</div>
+          <div class="fault-meta">
+            ${r.fecha && r.fecha !== '' ? `<span class="tag tag-date">${r.fecha.split('T')[0].split(' ')[0]}</span>` : ''}
+            ${r.operario ? `<span class="tag tag-op">${r.operario}</span>` : ''}
+            ${r.descripcion ? '<span class="chevron">›</span>' : ''}
+          </div>
+        </div>
+      </div>
+    `).join('') + '</div>';
+  } else if (type === 'pendientes') {
+    el.innerHTML = '<div class="card-list">' + DATA.pendientes.map(r => `
+      <div class="fault-card" onclick="showFaultDetail(${JSON.stringify(r).replace(/"/g,'&quot;')})">
+        <div class="fault-card-header">
+          <div class="fault-title">${r.averia || r.maquina || '–'}</div>
+          <div class="fault-meta">
+            ${r.maquina ? `<span class="tag tag-machine">${r.maquina}</span>` : ''}
+            ${r.hecho === '✓' ? `<span class="tag tag-done">✓ Hecho</span>` : ''}
+            <span class="chevron">›</span>
+          </div>
+        </div>
+      </div>
+    `).join('') + '</div>';
+  } else if (type === 'revision') {
+    el.innerHTML = '<div class="card-list">' + DATA.revision_periodica.map(r => `
+      <div class="info-card" style="margin:0 0 8px">
+        <div class="info-card-title">${r.maquina}</div>
+        <div class="info-card-body">${r.tarea || '–'}</div>
+      </div>
+    `).join('') + '</div>';
+  } else if (type === 'diarias') {
+    const semanas = DATA.tareas_diarias;
+    el.innerHTML = Object.entries(semanas).map(([sem, items]) => `
+      <div class="semana-header">${sem}</div>
+      ${items.map(item => `<div class="semana-item"><div class="check-circle"></div><span>${item}</span></div>`).join('')}
+    `).join('');
+  } else if (type === 'carretillas') {
+    el.innerHTML = '<div style="padding:12px 0">' + DATA.carretillas.filter(c => c.cambio).map(c => `
+      <div class="carr-card">
+        <div class="carr-title"><span>${c.maquina || '–'}</span>${c.estado === 'VENCIDO' ? '<span class="tag vencido" style="font-size:11px;background:#3a0f0f;color:#ef4444;border-radius:4px;padding:2px 7px">VENCIDO</span>' : ''}</div>
+        <div class="carr-row"><span class="carr-key">Cambio</span><span class="carr-val">${c.cambio}</span></div>
+        ${c.fecha ? `<div class="carr-row"><span class="carr-key">Fecha</span><span class="carr-val">${c.fecha.split('T')[0].split(' ')[0]}</span></div>` : ''}
+        ${c.operario ? `<div class="carr-row"><span class="carr-key">Operario</span><span class="carr-val">${c.operario}</span></div>` : ''}
+        ${c.proximo ? `<div class="carr-row"><span class="carr-key">Próximo</span><span class="carr-val">${c.proximo}</span></div>` : ''}
+        ${c.vencimiento ? `<div class="carr-row"><span class="carr-key">Vencimiento</span><span class="carr-val ${c.estado === 'VENCIDO' ? 'vencido' : ''}">${c.vencimiento.split('T')[0].split(' ')[0]}</span></div>` : ''}
+      </div>
+    `).join('') + '</div>';
+  } else if (type === 'mejoras') {
+    el.innerHTML = '<div class="card-list">' + DATA.mejoras.map(r => `
+      <div class="info-card" style="margin:0 0 8px">
+        <div class="info-card-title">${r.maquina || '–'}</div>
+        <div class="info-card-body">${r.mejora}</div>
+        ${r.fecha ? `<div style="font-size:11px;color:var(--text3);margin-top:6px">${r.fecha.split('T')[0].split(' ')[0]} · ${r.operario}</div>` : ''}
+      </div>
+    `).join('') + '</div>';
+  } else if (type === 'pedidos') {
+    el.innerHTML = '<div class="card-list">' + DATA.pedidos.map(r => `
+      <div class="info-card" style="margin:0 0 8px">
+        <div class="info-card-title">${r.material}</div>
+        <div class="info-card-body">
+          ${r.operario ? `Operario: ${r.operario}<br>` : ''}
+          ${r.fecha_entrega ? `Entrega: ${r.fecha_entrega.split('T')[0].split(' ')[0]}<br>` : ''}
+          ${r.fecha_llegada ? `Llegada: ${r.fecha_llegada.split('T')[0].split(' ')[0]}` : ''}
+          ${r.quien ? `<br>Trae: ${r.quien}` : ''}
+        </div>
+      </div>
+    `).join('') + '</div>';
+  }
+}
+
+function hideTareasSection() {
+  document.getElementById('tareas-detail').style.display = 'none';
+  document.getElementById('tareas-home').style.display = '';
+}
+
+function hideMisTareas() {
+  document.getElementById('mis-tareas-detail').style.display = 'none';
+  document.getElementById('tareas-home').style.display = '';
+  updateMisTareasCount();
+}
+
+// ===== PROCEDIMIENTOS =====
+function showProcedSection(type) {
+  document.getElementById('proced-home').style.display = 'none';
+  document.getElementById('proced-detail').style.display = '';
+  const titles = {
+    luz:'⚡ Se Va la Luz', arrancar:'🔥 Arrancar Horno',
+    horno:'🌡 Encender Horno', vagonetas:'🚃 Vagonetas', compresor:'💨 Compresor – Cambio Aceite'
+  };
+  document.getElementById('proced-detail-title').textContent = titles[type];
+  const el = document.getElementById('proced-list');
+  
+  if (type === 'luz') {
+    el.innerHTML = '<div class="step-list">' + DATA.se_va_luz.map((s,i) => `
+      <div class="step-item">
+        <div class="step-num">${i+1}</div>
+        <div class="step-text"><strong>${s.paso}</strong>${s.detalle ? '<br><span style="color:var(--text2);font-size:12px">' + s.detalle + '</span>' : ''}</div>
+      </div>
+    `).join('') + '</div>';
+  } else if (type === 'arrancar') {
+    el.innerHTML = '<div class="step-list">' + DATA.arrancar_horno.map((s) => `
+      <div class="step-item">
+        <div class="step-num">${s.paso}</div>
+        <div class="step-text">${s.descripcion}</div>
+      </div>
+    `).join('') + '</div>';
+  } else if (type === 'horno') {
+    el.innerHTML = '<div class="step-list">' + DATA.horno_encendido.map((s) => `
+      <div class="step-item">
+        <div class="step-num">${s.paso}</div>
+        <div class="step-text">${s.descripcion}</div>
+      </div>
+    `).join('') + '</div>';
+  } else if (type === 'vagonetas') {
+    el.innerHTML = '<div class="card-list">' + DATA.vagonetas.map(v => `
+      <div class="info-card" style="margin:0 0 8px">
+        <div class="info-card-title">${v.titulo}</div>
+        <div class="info-card-body">${v.descripcion}${v.detalle ? '<br><br>' + v.detalle : ''}</div>
+      </div>
+    `).join('') + '</div>';
+  } else if (type === 'compresor') {
+    el.innerHTML = '<div class="step-list">' + DATA.compresor_pasos.map(s => `
+      <div class="step-item">
+        <div class="step-num">${s.paso}</div>
+        <div class="step-text">${s.descripcion}</div>
+      </div>
+    `).join('') + '</div>';
+  }
+}
+
+function hideProcedSection() {
+  document.getElementById('proced-detail').style.display = 'none';
+  document.getElementById('proced-home').style.display = '';
+}
+
+// ===== REFERENCIA =====
+function showRefSection(type) {
+  document.getElementById('ref-home').style.display = 'none';
+  document.getElementById('ref-detail').style.display = '';
+  const titles = {contrasenas:'🔑 Contraseñas', alarmas:'🚨 Alarmas', comandos:'⌨ Comandos MODSOF', notas:'📝 Notas Importantes'};
+  document.getElementById('ref-detail-title').textContent = titles[type];
+  const el = document.getElementById('ref-list');
+  
+  if (type === 'contrasenas') {
+    el.innerHTML = '<div style="padding:16px 0">' + DATA.contrasenas.map(c => `
+      <div class="pass-card">
+        <div class="pass-desc">${c.descripcion}</div>
+        <div class="pass-code">${c.codigo}</div>
+      </div>
+    `).join('') + '</div>';
+  } else if (type === 'alarmas') {
+    el.innerHTML = '<div style="padding:16px 0">' + DATA.alarmas.map(a => `
+      <div class="alarm-card">
+        <div class="alarm-num">${a.alarma}</div>
+        <div class="alarm-desc">${a.descripcion}</div>
+      </div>
+    `).join('') + '</div>';
+  } else if (type === 'comandos') {
+    el.innerHTML = '<div style="padding:16px 0">' + DATA.comandos.map(c => `
+      <div class="cmd-card">
+        <span class="cmd-key">${c.tecla}</span>
+        <span class="cmd-action">${c.accion}</span>
+      </div>
+    `).join('') + '</div>';
+  } else if (type === 'notas') {
+    el.innerHTML = '<div style="padding:16px 0">' + DATA.notas.map(n => `
+      <div class="info-card">
+        <div class="info-card-title">${n.titulo}</div>
+        <div class="info-card-body">${n.descripcion}</div>
+      </div>
+    `).join('') + '</div>';
+  }
+}
+
+function hideRefSection() {
+  document.getElementById('ref-detail').style.display = 'none';
+  document.getElementById('ref-home').style.display = '';
+}
+
+// ===== SEARCH =====
+document.getElementById('search').addEventListener('input', function() {
+  const q = this.value.trim().toLowerCase();
+  if (!q || q.length < 2) {
+    document.getElementById('search-results').style.display = 'none';
+    document.getElementById('averias-home').style.display = '';
+    document.getElementById('averias-detail').style.display = 'none';
+    document.getElementById('fault-detail').style.display = 'none';
+    return;
+  }
+  
+  // Activate averías tab
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-averias').classList.add('active');
+  document.querySelector('.nav-btn').classList.add('active');
+  document.getElementById('averias-home').style.display = 'none';
+  document.getElementById('averias-detail').style.display = 'none';
+  document.getElementById('fault-detail').style.display = 'none';
+  document.getElementById('search-results').style.display = '';
+  
+  // Search across all faults
+  const results = [];
+  Object.entries(DATA.faults).forEach(([section, records]) => {
+    records.forEach(r => {
+      const text = [r.averia,r.causa,r.reparacion,r.maquina,r.descripcion].join(' ').toLowerCase();
+      if (text.includes(q)) results.push({...r, _section: section});
+    });
+  });
+  
+  const el = document.getElementById('search-results-content');
+  if (!results.length) {
+    el.innerHTML = '<div class="empty"><div class="empty-icon">🔍</div>Sin resultados para "' + q + '"</div>';
+    return;
+  }
+  
+  el.innerHTML = `<div class="search-result-section">${results.length} resultado${results.length!==1?'s':''} para "${q}"</div>` +
+    '<div class="card-list">' + results.map(r => `
+      <div class="fault-card" onclick="showFaultDetail(${JSON.stringify(r).replace(/"/g,'&quot;')})">
+        <div class="fault-card-header">
+          <div class="fault-title">${r.averia || '–'}</div>
+          <div class="fault-meta">
+            <span class="tag tag-machine">${r._section}</span>
+            ${r.maquina ? `<span class="tag tag-machine">${r.maquina}</span>` : ''}
+            ${r.fecha ? `<span class="tag tag-date">${r.fecha.split('T')[0].split(' ')[0]}</span>` : ''}
+            <span class="chevron">›</span>
+          </div>
+        </div>
+      </div>
+    `).join('') + '</div>';
+});
+</script>
+
+<!-- ===== MIS TAREAS ===== -->
+<style>
+.mt-card{background:#1e2235;border:1px solid var(--border);border-radius:12px;padding:13px 14px;margin-bottom:8px;position:relative}
+.mt-card.done-card{opacity:.55}
+.mt-title{font-weight:600;font-size:13px;color:var(--text);line-height:1.3;padding-right:60px}
+.mt-desc{font-size:12px;color:var(--text2);margin-top:4px;padding-right:60px;white-space:pre-wrap}
+.mt-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;align-items:center}
+.mt-actions{position:absolute;top:10px;right:10px;display:flex;gap:6px}
+.mt-btn{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:5px 9px;font-size:12px;cursor:pointer;color:var(--text2)}
+.mt-btn:active{opacity:.7}
+.mt-btn.done-btn{color:var(--green)}
+.mt-btn.del-btn{color:var(--red)}
+.mt-fab{position:fixed;bottom:80px;right:18px;width:50px;height:50px;border-radius:50%;background:var(--orange);border:none;color:white;font-size:26px;cursor:pointer;z-index:200;box-shadow:0 4px 16px rgba(249,115,22,.45);display:flex;align-items:center;justify-content:center}
+.mt-modal{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.75);display:flex;align-items:flex-end}
+.mt-modal-box{background:var(--bg2);border-radius:16px 16px 0 0;padding:20px 16px 36px;width:100%;max-height:90vh;overflow-y:auto}
+.mt-modal-box h3{font-size:15px;font-weight:700;margin-bottom:14px}
+.mt-input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:13px;color:var(--text);outline:none;margin-bottom:10px;font-family:inherit}
+.mt-input::placeholder{color:var(--text3)}
+textarea.mt-input{min-height:80px;resize:vertical}
+.mt-row{display:flex;gap:8px}
+.mt-save{flex:1;background:var(--orange);border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:700;color:white;cursor:pointer}
+.mt-cancel{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px 16px;font-size:14px;color:var(--text2);cursor:pointer}
+.mt-filter-row{display:flex;gap:6px;padding:10px 16px 0;overflow-x:auto}
+.mt-filter{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:12px;color:var(--text2);cursor:pointer;white-space:nowrap}
+.mt-filter.active-filter{background:var(--orange);border-color:var(--orange);color:white}
+.mt-empty{text-align:center;padding:40px 20px;color:var(--text3)}
+</style>
+
+<script>
+let TASKS = JSON.parse(localStorage.getItem('ra1_tasks_v2') || '[]');
+let editingId = null;
+let taskFilter = 'todas';
+
+function saveTasks() {
+  localStorage.setItem('ra1_tasks_v2', JSON.stringify(TASKS));
+  updateMisTareasCount();
+}
+
+function updateMisTareasCount() {
+  const cnt = document.getElementById('mis-tareas-count');
+  if (cnt) {
+    const pending = TASKS.filter(t => t.estado !== 'hecha').length;
+    cnt.textContent = TASKS.length + ' tarea' + (TASKS.length !== 1 ? 's' : '') + (pending > 0 ? ' · ' + pending + ' pendiente' + (pending !== 1 ? 's' : '') : '');
+  }
+}
+
+function renderMisTareas() {
+  const el = document.getElementById('mis-tareas-list');
+  if (!el) return;
+  
+  let filtered = TASKS;
+  if (taskFilter === 'pendientes') filtered = TASKS.filter(t => t.estado === 'pendiente');
+  else if (taskFilter === 'en_curso') filtered = TASKS.filter(t => t.estado === 'en_curso');
+  else if (taskFilter === 'hechas') filtered = TASKS.filter(t => t.estado === 'hecha');
+
+  if (!filtered.length) {
+    el.innerHTML = '<div class="mt-empty"><div style="font-size:36px">📋</div><div style="margin-top:8px">' + (TASKS.length ? 'Sin tareas en esta categoría' : 'Sin tareas.<br>Pulsa + para añadir una.') + '</div></div>';
+    return;
+  }
+
+  const estadoLabel = {pendiente:'Pendiente', en_curso:'En curso', hecha:'Hecha ✓'};
+  const estadoColor = {pendiente:'#3b82f6', en_curso:'#f59e0b', hecha:'#22c55e'};
+
+  el.innerHTML = filtered.map(t => `
+    <div class="mt-card ${t.estado === 'hecha' ? 'done-card' : ''}">
+      <div class="mt-title">${esc(t.titulo)}</div>
+      ${t.descripcion ? `<div class="mt-desc">${esc(t.descripcion)}</div>` : ''}
+      <div class="mt-meta">
+        <span class="tag" style="background:${estadoColor[t.estado]}22;color:${estadoColor[t.estado]}">${estadoLabel[t.estado] || t.estado}</span>
+        ${t.fecha ? `<span class="tag tag-date">${t.fecha}</span>` : ''}
+        ${t.prioridad === 'alta' ? '<span class="tag" style="background:#3a0f0f;color:#ef4444">⚡ Alta</span>' : ''}
+      </div>
+      <div class="mt-actions">
+        <button class="mt-btn" onclick="editTask('${t.id}')">✏️</button>
+        <button class="mt-btn done-btn" onclick="toggleDone('${t.id}')">✓</button>
+        <button class="mt-btn del-btn" onclick="deleteTask('${t.id}')">🗑</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function esc(s) {
+  return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function openAddModal(id) {
+  editingId = id || null;
+  const t = id ? TASKS.find(x => x.id === id) : null;
+  document.getElementById('mt-modal-title').textContent = t ? 'Editar tarea' : 'Nueva tarea';
+  document.getElementById('mt-titulo').value = t ? t.titulo : '';
+  document.getElementById('mt-desc-input').value = t ? (t.descripcion || '') : '';
+  document.getElementById('mt-fecha').value = t ? (t.fecha || '') : '';
+  document.getElementById('mt-estado').value = t ? t.estado : 'pendiente';
+  document.getElementById('mt-prioridad').value = t ? (t.prioridad || 'normal') : 'normal';
+  document.getElementById('mt-modal').style.display = 'flex';
+  setTimeout(() => document.getElementById('mt-titulo').focus(), 100);
+}
+
+function closeModal() {
+  document.getElementById('mt-modal').style.display = 'none';
+  editingId = null;
+}
+
+function saveTask() {
+  const titulo = document.getElementById('mt-titulo').value.trim();
+  if (!titulo) { document.getElementById('mt-titulo').focus(); return; }
+  const desc = document.getElementById('mt-desc-input').value.trim();
+  const fecha = document.getElementById('mt-fecha').value;
+  const estado = document.getElementById('mt-estado').value;
+  const prioridad = document.getElementById('mt-prioridad').value;
+
+  if (editingId) {
+    const t = TASKS.find(x => x.id === editingId);
+    if (t) { t.titulo = titulo; t.descripcion = desc; t.fecha = fecha; t.estado = estado; t.prioridad = prioridad; }
+  } else {
+    TASKS.unshift({ id: 't_' + Date.now(), titulo, descripcion: desc, fecha, estado, prioridad });
+  }
+  saveTasks();
+  closeModal();
+  renderMisTareas();
+}
+
+function editTask(id) { openAddModal(id); }
+
+function toggleDone(id) {
+  const t = TASKS.find(x => x.id === id);
+  if (!t) return;
+  t.estado = t.estado === 'hecha' ? 'pendiente' : 'hecha';
+  saveTasks();
+  renderMisTareas();
+}
+
+function deleteTask(id) {
+  if (!confirm('¿Eliminar esta tarea?')) return;
+  TASKS = TASKS.filter(x => x.id !== id);
+  saveTasks();
+  renderMisTareas();
+}
+
+function setFilter(f, btn) {
+  taskFilter = f;
+  document.querySelectorAll('.mt-filter').forEach(b => b.classList.remove('active-filter'));
+  btn.classList.add('active-filter');
+  renderMisTareas();
+}
+
+document.addEventListener('DOMContentLoaded', updateMisTareasCount);
+</script>
+
+<!-- Modal añadir/editar tarea -->
+<div id="mt-modal" style="display:none" class="mt-modal" onclick="if(event.target===this)closeModal()">
+  <div class="mt-modal-box">
+    <h3 id="mt-modal-title">Nueva tarea</h3>
+    <input id="mt-titulo" class="mt-input" type="text" placeholder="Título de la tarea *" maxlength="120">
+    <textarea id="mt-desc-input" class="mt-input" placeholder="Descripción (opcional)"></textarea>
+    <input id="mt-fecha" class="mt-input" type="date">
+    <select id="mt-estado" class="mt-input">
+      <option value="pendiente">Pendiente</option>
+      <option value="en_curso">En curso</option>
+      <option value="hecha">Hecha</option>
+    </select>
+    <select id="mt-prioridad" class="mt-input">
+      <option value="normal">Prioridad normal</option>
+      <option value="alta">Prioridad alta ⚡</option>
+    </select>
+    <div class="mt-row">
+      <button class="mt-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="mt-save" onclick="saveTask()">Guardar</button>
+    </div>
+  </div>
+</div>
+<!-- ===== FIN MIS TAREAS ===== -->
+<!-- ===== MIS AVERÍAS ===== -->
+<style>
+.card-edit-btn{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:4px 7px;font-size:12px;cursor:pointer;color:var(--text2);line-height:1}
+.card-del-btn{background:var(--bg3);border:1px solid #5a1a1a;border-radius:6px;padding:4px 7px;font-size:12px;cursor:pointer;color:var(--red);line-height:1}
+.card-btns{position:absolute;top:8px;right:8px;display:flex;gap:4px;z-index:10}
+</style>
+<script>
+var MIS_AVERIAS = JSON.parse(localStorage.getItem('ra1_mis_averias_v1')||'[]');
+var avFilter = 'todas';
+var editingAvId = null;
+
+// Procedimientos custom storage (kept from previous)
+var CUSTOM_STEPS  = JSON.parse(localStorage.getItem('ra1_cs_v1')||'{}');
+var EDITED_STEPS  = JSON.parse(localStorage.getItem('ra1_es_v1')||'{}');
+var HIDDEN_STEPS = JSON.parse(localStorage.getItem('ra1_hs_v1')||'{}');
+var _editStep = null;
+var _curProc  = null;
+
+function saveAverias(){ localStorage.setItem('ra1_mis_averias_v1',JSON.stringify(MIS_AVERIAS)); updateMisAveriasCount(); }
+
+function updateMisAveriasCount(){
+  var cnt=document.getElementById('mis-averias-count');
+  if(!cnt) return;
+  var open=MIS_AVERIAS.filter(function(a){return a.estado!=='resuelta';}).length;
+  cnt.textContent=MIS_AVERIAS.length+' avería'+(MIS_AVERIAS.length!==1?'s':'')+(open>0?' · '+open+' abierta'+(open!==1?'s':''):'');
+}
+
+function showMisAverias(){
+  document.getElementById('averias-home').style.display='none';
+  document.getElementById('mis-averias-detail').style.display='';
+  avFilter='todas';
+  document.querySelectorAll('.mt-filter').forEach(function(b,i){b.classList.toggle('active-filter',i===0);});
+  renderMisAverias();
+}
+
+function hideMisAverias(){
+  document.getElementById('mis-averias-detail').style.display='none';
+  document.getElementById('averias-home').style.display='';
+  updateMisAveriasCount();
+}
+
+function setAvFilter(f,btn){
+  avFilter=f;
+  document.querySelectorAll('#mis-averias-detail .mt-filter').forEach(function(b){b.classList.remove('active-filter');});
+  btn.classList.add('active-filter');
+  renderMisAverias();
+}
+
+function renderMisAverias(){
+  var el=document.getElementById('mis-averias-list');
+  if(!el) return;
+  var filtered=MIS_AVERIAS;
+  if(avFilter==='abierta')  filtered=MIS_AVERIAS.filter(function(a){return a.estado==='abierta';});
+  if(avFilter==='en_curso') filtered=MIS_AVERIAS.filter(function(a){return a.estado==='en_curso';});
+  if(avFilter==='resuelta') filtered=MIS_AVERIAS.filter(function(a){return a.estado==='resuelta';});
+
+  if(!filtered.length){
+    el.innerHTML='<div class="mt-empty"><div style="font-size:36px">⚠️</div><div style="margin-top:8px">'+(MIS_AVERIAS.length?'Sin averías en esta categoría':'Sin averías.<br>Pulsa + para añadir una.')+'</div></div>';
+    return;
+  }
+
+  var estLabel={abierta:'Abierta',en_curso:'En curso',resuelta:'Resuelta ✓'};
+  var estColor={abierta:'#ef4444',en_curso:'#f59e0b',resuelta:'#22c55e'};
+  var secIcons={APILADO:'🔩',DESAPILADO:'📦','AVERIA HORNO Y VIAS':'🔥',FLEJADORA:'🔧',MOLINO:'⚙',TRANSBORDADOR:'🚃','ASPIRACIÓN':'💨',SECADERO:'🌡','GAS Y CALDERA':'🔆',OTRO:'❓'};
+
+  el.innerHTML=filtered.map(function(a){
+    var c=estColor[a.estado]||'#6b6f8a';
+    var icon=secIcons[a.seccion]||'⚠️';
+    return '<div class="mt-card '+(a.estado==="resuelta"?"done-card":"")+'">'+
+      '<div class="mt-title">'+icon+' '+esc3(a.averia)+'</div>'+
+      (a.maquina?'<div style="font-size:11px;color:var(--text3);margin-top:2px">'+esc3(a.maquina)+'</div>':'')+
+      (a.causa?'<div class="mt-desc">'+esc3(a.causa)+'</div>':'')+
+      (a.reparacion?'<div class="mt-desc" style="color:#22c55e80;border-left:2px solid #22c55e40;padding-left:6px;margin-top:4px">'+esc3(a.reparacion)+'</div>':'')+
+      '<div class="mt-meta">'+
+        '<span class="tag" style="background:'+c+'22;color:'+c+'">'+estLabel[a.estado]+'</span>'+
+        (a.fecha?'<span class="tag tag-date">'+a.fecha+'</span>':'')+
+        (a.operario?'<span class="tag tag-op">'+esc3(a.operario)+'</span>':'')+
+      '</div>'+
+      '<div class="mt-actions">'+
+        '<button class="mt-btn" onclick="editAv(\''+a.id+'\')">✏️</button>'+
+        '<button class="mt-btn done-btn" onclick="toggleAv(\''+a.id+'\')">✓</button>'+
+        '<button class="mt-btn del-btn" onclick="deleteAv(\''+a.id+'\')">🗑</button>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+
+function esc3(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function openAvModal(id){
+  editingAvId=id||null;
+  var a=id?MIS_AVERIAS.find(function(x){return x.id===id;}):null;
+  document.getElementById('av-modal-title').textContent=a?'Editar avería':'Nueva avería';
+  document.getElementById('av-averia').value=a?a.averia:'';
+  document.getElementById('av-maquina').value=a?(a.maquina||''):'';
+  document.getElementById('av-seccion').value=a?(a.seccion||'OTRO'):'OTRO';
+  document.getElementById('av-causa').value=a?(a.causa||''):'';
+  document.getElementById('av-reparacion').value=a?(a.reparacion||''):'';
+  document.getElementById('av-fecha').value=a?(a.fecha||''):'';
+  document.getElementById('av-operario').value=a?(a.operario||''):'';
+  document.getElementById('av-estado').value=a?(a.estado||'abierta'):'abierta';
+  document.getElementById('av-modal').style.display='flex';
+  setTimeout(function(){document.getElementById('av-averia').focus();},100);
+}
+
+function editAv(id){ openAvModal(id); }
+
+function saveAvModal(){
+  var averia=document.getElementById('av-averia').value.trim();
+  if(!averia){document.getElementById('av-averia').focus();return;}
+  var rec={
+    id: editingAvId||'av_'+Date.now(),
+    averia:averia,
+    maquina:document.getElementById('av-maquina').value.trim(),
+    seccion:document.getElementById('av-seccion').value,
+    causa:document.getElementById('av-causa').value.trim(),
+    reparacion:document.getElementById('av-reparacion').value.trim(),
+    fecha:document.getElementById('av-fecha').value,
+    operario:document.getElementById('av-operario').value.trim(),
+    estado:document.getElementById('av-estado').value
+  };
+  if(editingAvId){
+    var idx=MIS_AVERIAS.findIndex(function(x){return x.id===editingAvId;});
+    if(idx>=0) MIS_AVERIAS[idx]=rec;
+  } else {
+    MIS_AVERIAS.unshift(rec);
+  }
+  saveAverias(); closeAvModal(); renderMisAverias();
+}
+
+function toggleAv(id){
+  var a=MIS_AVERIAS.find(function(x){return x.id===id;});
+  if(!a) return;
+  a.estado=a.estado==='resuelta'?'abierta':'resuelta';
+  saveAverias(); renderMisAverias();
+}
+
+function deleteAv(id){
+  if(!confirm('¿Eliminar esta avería?')) return;
+  MIS_AVERIAS=MIS_AVERIAS.filter(function(x){return x.id!==id;});
+  saveAverias(); renderMisAverias();
+}
+
+function closeAvModal(){ document.getElementById('av-modal').style.display='none'; editingAvId=null; }
+
+document.addEventListener('DOMContentLoaded', updateMisAveriasCount);
+
+// Also restore original showFaultSection (no inline edit buttons)
+function showFaultSection(name){
+  currentFaultSection=name;
+  var records=DATA.faults[name]||[];
+  document.getElementById('averias-home').style.display='none';
+  document.getElementById('averias-detail').style.display='';
+  document.getElementById('fault-detail').style.display='none';
+  document.getElementById('averias-detail-title').textContent=name;
+  document.getElementById('averias-count').textContent=records.length;
+  renderFaultList(records,'averias-list');
+}
+function hideFaultSection(){
+  document.getElementById('averias-detail').style.display='none';
+  document.getElementById('averias-home').style.display='';
+  document.getElementById('fault-detail').style.display='none';
+}
+function hideFaultDetail(){
+  document.getElementById('fault-detail').style.display='none';
+  document.getElementById('averias-detail').style.display='';
+}
+
+// ===== PROCEDIMIENTOS EDIT (kept) =====
+function _saveSteps(){ localStorage.setItem('ra1_cs_v1',JSON.stringify(CUSTOM_STEPS)); localStorage.setItem('ra1_es_v1',JSON.stringify(EDITED_STEPS)); localStorage.setItem('ra1_hs_v1',JSON.stringify(HIDDEN_STEPS)); }
+function _esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function _btns(onEdit,onDel){
+  return '<div class="card-btns"><button class="card-edit-btn" onclick="'+onEdit+'">✏️</button>'+(onDel?'<button class="card-del-btn" onclick="'+onDel+'">🗑</button>':'')+'</div>';
+}
+function _getOrigSteps(t){
+  if(t==='luz') return DATA.se_va_luz.map(function(s,i){return{paso:i+1,descripcion:s.paso,detalle:s.detalle||''};});
+  if(t==='arrancar') return DATA.arrancar_horno;
+  if(t==='horno')    return DATA.horno_encendido;
+  if(t==='compresor')return DATA.compresor_pasos;
+  if(t==='vagonetas')return DATA.vagonetas;
+  return [];
+}
+function _mergedSteps(t){
+  var orig=_getOrigSteps(t).map(function(s,i){return Object.assign({},s,EDITED_STEPS[t]&&EDITED_STEPS[t][i]||{},{_o:i,_c:-1});});
+  var cust=(CUSTOM_STEPS[t]||[]).map(function(s,i){return Object.assign({},s,{_o:-1,_c:i});});
+  return orig.concat(cust);
+}
+function showProcedSection(type){
+  _curProc=type;
+  document.getElementById('proced-home').style.display='none';
+  document.getElementById('proced-detail').style.display='';
+  var titles={luz:'⚡ Se Va la Luz',arrancar:'🔥 Arrancar Horno',horno:'🌡 Encender Horno',vagonetas:'🚃 Vagonetas',compresor:'💨 Compresor – Cambio Aceite'};
+  document.getElementById('proced-detail-title').textContent=titles[type]||type;
+  var el=document.getElementById('proced-list');
+  var merged=_mergedSteps(type);
+  if(type==='vagonetas'){
+    el.innerHTML='<div class="card-list">'+merged.map(function(v){
+      var ec="openStepModal('vagonetas',"+v._o+","+v._c+");event.stopPropagation()";
+      var dc="deleteStep('vagonetas',"+v._o+","+v._c+");event.stopPropagation()";
+      return '<div style="position:relative">'+_btns(ec,dc)+'<div class="info-card" style="margin:0 0 8px"><div class="info-card-title">'+_esc(v.titulo||'–')+'</div><div class="info-card-body">'+_esc(v.descripcion||'')+(v.detalle?'<br><br>'+_esc(v.detalle):'')+'</div></div></div>';
+    }).join('')+'</div>';
+  } else {
+    el.innerHTML='<div class="step-list">'+merged.map(function(s,i){
+      var ec="openStepModal('"+type+"',"+s._o+","+s._c+");event.stopPropagation()";
+      var dc="deleteStep('"+type+"',"+s._o+","+s._c+");event.stopPropagation()";
+      var stepNum=_esc(String(s.paso||i+1));
+      var stepDesc=_esc(s.descripcion||'');
+      var stepDet=s.detalle?'<br><span style="color:var(--text2);font-size:12px">'+_esc(s.detalle)+'</span>':'';
+      return '<div style="position:relative">'+_btns(ec,dc)+'<div class="step-item"><div class="step-num">'+stepNum+'</div><div class="step-text">'+stepDesc+stepDet+'</div></div></div>';
+    }).join('')+'</div>';
+  }
+  document.getElementById('proced-fab').style.display='flex';
+}
+function openStepModal(procType,origIdx,customIdx){
+  _editStep={procType:procType,origIdx:origIdx,customIdx:customIdx};
+  var s={titulo:'',descripcion:''};
+  if(origIdx>=0){var base=_getOrigSteps(procType)[origIdx]||{};var edit=(EDITED_STEPS[procType]&&EDITED_STEPS[procType][origIdx])||{};s=Object.assign({},s,base,edit);if(!s.descripcion)s.descripcion=s.detalle||'';}
+  else if(customIdx>=0){s=Object.assign({},s,CUSTOM_STEPS[procType][customIdx]||{});}
+  var isVag=procType==='vagonetas';
+  document.getElementById('es-modal-title').textContent=(origIdx===-1&&customIdx===-1)?'Nuevo '+(isVag?'elemento':'paso'):'Editar '+(isVag?'elemento':'paso');
+  document.getElementById('es-titulo-wrap').style.display=isVag?'':'none';
+  document.getElementById('es-titulo').value=s.titulo||'';
+  document.getElementById('es-desc').value=s.descripcion||'';
+  document.getElementById('es-modal').style.display='flex';
+  setTimeout(function(){document.getElementById('es-desc').focus();},100);
+}
+function saveStepModal(){
+  var desc=document.getElementById('es-desc').value.trim();
+  if(!desc){document.getElementById('es-desc').focus();return;}
+  var t=_editStep.procType,oi=_editStep.origIdx,ci=_editStep.customIdx;
+  var isVag=t==='vagonetas';
+  var rec=isVag?{titulo:document.getElementById('es-titulo').value.trim()||'Nota',descripcion:desc}:{descripcion:desc};
+  if(oi>=0){if(!EDITED_STEPS[t])EDITED_STEPS[t]={};EDITED_STEPS[t][oi]=rec;}
+  else if(ci>=0){CUSTOM_STEPS[t][ci]=rec;}
+  else{if(!CUSTOM_STEPS[t])CUSTOM_STEPS[t]=[];CUSTOM_STEPS[t].push(rec);}
+  _saveSteps(); closeStepModal(); showProcedSection(t);
+}
+function deleteStep(procType,oi,ci){if(!confirm('¿Eliminar este paso?'))return;if(ci>=0){CUSTOM_STEPS[procType].splice(ci,1);}else if(oi>=0){if(!HIDDEN_STEPS[procType])HIDDEN_STEPS[procType]=[];if(HIDDEN_STEPS[procType].indexOf(oi)===-1)HIDDEN_STEPS[procType].push(oi);}  _saveSteps();showProcedSection(procType);}
+function closeStepModal(){document.getElementById('es-modal').style.display='none';_editStep=null;}
+function hideProcedSection(){document.getElementById('proced-detail').style.display='none';document.getElementById('proced-home').style.display='';document.getElementById('proced-fab').style.display='none';}
+</script>
+
+<!-- Modal Mis Averías -->
+<div id="av-modal" style="display:none" class="mt-modal" onclick="if(event.target===this)closeAvModal()">
+  <div class="mt-modal-box">
+    <h3 id="av-modal-title">Nueva avería</h3>
+    <input type="hidden" id="av-context" value="mis_averias">
+    <input type="hidden" id="av-orig-idx" value="-1">
+    <input type="hidden" id="av-custom-idx" value="-1">
+    <input id="av-averia" class="mt-input" type="text" placeholder="Avería / Problema *" maxlength="200">
+    <input id="av-maquina" class="mt-input" type="text" placeholder="Máquina" maxlength="100">
+    <select id="av-seccion" class="mt-input">
+      <option value="APILADO">🔩 Apilado</option>
+      <option value="DESAPILADO">📦 Desapilado</option>
+      <option value="AVERIA HORNO Y VIAS">🔥 Horno y Vías</option>
+      <option value="FLEJADORA">🔧 Flejadora</option>
+      <option value="MOLINO">⚙ Molino</option>
+      <option value="TRANSBORDADOR">🚃 Transbordador</option>
+      <option value="ASPIRACIÓN">💨 Aspiración</option>
+      <option value="SECADERO">🌡 Secadero</option>
+      <option value="GAS Y CALDERA">🔆 Gas y Caldera</option>
+      <option value="OTRO" selected>❓ Otro</option>
+    </select>
+    <textarea id="av-causa" class="mt-input" placeholder="Posible causa" style="min-height:55px"></textarea>
+    <textarea id="av-reparacion" class="mt-input" placeholder="Reparación / Solución" style="min-height:55px"></textarea>
+    <div style="display:flex;gap:8px">
+      <input id="av-fecha" class="mt-input" type="date" style="flex:1">
+      <input id="av-operario" class="mt-input" type="text" placeholder="Operario" style="flex:1" maxlength="50">
+    </div>
+    <select id="av-estado" class="mt-input">
+      <option value="abierta">Abierta</option>
+      <option value="en_curso">En curso</option>
+      <option value="resuelta">Resuelta ✓</option>
+    </select>
+    <div class="mt-row">
+      <button class="mt-cancel" onclick="closeAvModal()">Cancelar</button>
+      <button class="mt-save" style="background:#ef4444" onclick="saveAvModal()">Guardar</button>
+    </div>
+  </div>
+</div>
+<!-- ===== FIN MIS AVERÍAS ===== -->
+
+<!-- ===== EDICIÓN AVERÍAS POR SECCIÓN ===== -->
+<script>
+// Almacenamiento de averías personalizadas por sección
+var CUSTOM_FAULTS = JSON.parse(localStorage.getItem('ra1_cf_v1')||'{}');
+var EDITED_FAULTS = JSON.parse(localStorage.getItem('ra1_ef_v1')||'{}');
+var HIDDEN_FAULTS = JSON.parse(localStorage.getItem('ra1_hf_v1')||'{}');
+var _editFault = null;
+
+function _saveFaults(){
+  localStorage.setItem('ra1_cf_v1', JSON.stringify(CUSTOM_FAULTS));
+  localStorage.setItem('ra1_ef_v1', JSON.stringify(EDITED_FAULTS));
+  localStorage.setItem('ra1_hf_v1', JSON.stringify(HIDDEN_FAULTS));
+}
+
+function _mergedFaults(section){
+  var hidden = HIDDEN_FAULTS[section]||[];
+  var orig = (DATA.faults[section]||[]).map(function(f,i){
+    return Object.assign({}, f, (EDITED_FAULTS[section]&&EDITED_FAULTS[section][i])||{}, {_o:i,_c:-1});
+  }).filter(function(f){ return hidden.indexOf(f._o)===-1; });
+  var cust = (CUSTOM_FAULTS[section]||[]).map(function(f,i){
+    return Object.assign({}, f, {_o:-1,_c:i});
+  });
+  return orig.concat(cust);
+}
+
+function _faultBtns(onEdit, onDel){
+  return '<div class="card-btns">'
+    +'<button class="card-edit-btn" onclick="'+onEdit+'">✏️</button>'
+    +(onDel?'<button class="card-del-btn" onclick="'+onDel+'">🗑</button>':'')
+    +'</div>';
+}
+
+// Sobrescribe showFaultSection con soporte de edición
+function showFaultSection(name){
+  currentFaultSection = name;
+  document.getElementById('averias-home').style.display='none';
+  document.getElementById('averias-detail').style.display='';
+  document.getElementById('fault-detail').style.display='none';
+  document.getElementById('averias-detail-title').textContent = name;
+  var merged = _mergedFaults(name);
+  document.getElementById('averias-count').textContent = merged.length;
+  renderFaultListEditable(merged, 'averias-list', name);
+  document.getElementById('averias-fab').style.display='flex';
+}
+
+function renderFaultListEditable(records, containerId, section){
+  var el = document.getElementById(containerId);
+  if(!records.length){
+    el.innerHTML='<div class="empty"><div class="empty-icon">📭</div>Sin registros. Pulsa + para añadir.</div>';
+    return;
+  }
+  el.innerHTML = records.map(function(r){
+    var oi = r._o !== undefined ? r._o : -1;
+    var ci = r._c !== undefined ? r._c : -1;
+    var ec = "openFaultEditModal('"+_escJs(section)+"',"+oi+","+ci+");event.stopPropagation()";
+    var dc = "deleteFaultItem('"+_escJs(section)+"',"+oi+","+ci+");event.stopPropagation()";
+    var rData = JSON.stringify(r).replace(/"/g,'&quot;');
+    return '<div style="position:relative">'
+      + _faultBtns(ec, dc)
+      + '<div class="fault-card" onclick="showFaultDetail('+rData+')">'
+      + '<div class="fault-card-header">'
+      + '<div class="fault-title">'+_escH(r.averia||r.tarea||'–')+'</div>'
+      + '<div class="fault-meta">'
+      + (r.maquina?'<span class="tag tag-machine">'+_escH(r.maquina)+'</span>':'')
+      + (r.fecha&&r.fecha!==''?'<span class="tag tag-date">'+r.fecha.split('T')[0].split(' ')[0]+'</span>':'')
+      + (r.operario&&r.operario!==''?'<span class="tag tag-op">'+_escH(r.operario)+'</span>':'')
+      + (r.hecho==='✓'?'<span class="tag tag-done">✓ Hecho</span>':'')
+      + '<span class="chevron">›</span>'
+      + '</div></div></div></div>';
+  }).join('');
+}
+
+function _escH(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function _escJs(s){ return (s||'').replace(/'/g,"\\'"); }
+
+// Sobrescribe hideFaultSection para ocultar FAB
+function hideFaultSection(){
+  document.getElementById('averias-detail').style.display='none';
+  document.getElementById('averias-home').style.display='';
+  document.getElementById('fault-detail').style.display='none';
+  document.getElementById('averias-fab').style.display='none';
+}
+
+// Abre el modal av-modal reutilizado para editar averías de sección
+function openFaultEditModal(section, origIdx, customIdx){
+  var sec = section || currentFaultSection;
+  _editFault = {section: sec, origIdx: origIdx, customIdx: customIdx};
+  var r = {averia:'',maquina:'',causa:'',reparacion:'',fecha:'',operario:''};
+  if(origIdx >= 0){
+    var base = (DATA.faults[sec]||[])[origIdx] || {};
+    var edit = (EDITED_FAULTS[sec]&&EDITED_FAULTS[sec][origIdx]) || {};
+    r = Object.assign({}, r, base, edit);
+  } else if(customIdx >= 0){
+    r = Object.assign({}, r, (CUSTOM_FAULTS[sec]||[])[customIdx] || {});
+  }
+  document.getElementById('av-context').value = 'seccion';
+  document.getElementById('av-orig-idx').value = origIdx;
+  document.getElementById('av-custom-idx').value = customIdx;
+  document.getElementById('av-modal-title').textContent = (origIdx===-1&&customIdx===-1) ? 'Nueva avería' : 'Editar avería';
+  document.getElementById('av-averia').value = r.averia||'';
+  document.getElementById('av-maquina').value = r.maquina||'';
+  document.getElementById('av-seccion').value = sec||'OTRO';
+  document.getElementById('av-causa').value = r.causa||'';
+  document.getElementById('av-reparacion').value = r.reparacion||'';
+  document.getElementById('av-fecha').value = r.fecha||'';
+  document.getElementById('av-operario').value = r.operario||'';
+  document.getElementById('av-estado').value = r.estado||'abierta';
+  document.getElementById('av-modal').style.display='flex';
+  setTimeout(function(){ document.getElementById('av-averia').focus(); }, 100);
+}
+
+function deleteFaultItem(section, origIdx, customIdx){
+  if(!confirm('¿Eliminar esta avería?')) return;
+  if(customIdx>=0){
+    if(!CUSTOM_FAULTS[section]) return;
+    CUSTOM_FAULTS[section].splice(customIdx, 1);
+  } else if(origIdx>=0){
+    if(!HIDDEN_FAULTS[section]) HIDDEN_FAULTS[section]=[];
+    if(HIDDEN_FAULTS[section].indexOf(origIdx)===-1) HIDDEN_FAULTS[section].push(origIdx);
+  }
+  _saveFaults();
+  showFaultSection(section);
+}
+
+// Sobrescribe saveAvModal para gestionar ambos contextos
+var _origSaveAvModal = saveAvModal;
+function saveAvModal(){
+  var ctx = document.getElementById('av-context').value;
+  if(ctx !== 'seccion'){ _origSaveAvModal(); return; }
+
+  var averia = document.getElementById('av-averia').value.trim();
+  if(!averia){ document.getElementById('av-averia').focus(); return; }
+
+  var sec = _editFault ? _editFault.section : currentFaultSection;
+  var oi = parseInt(document.getElementById('av-orig-idx').value);
+  var ci = parseInt(document.getElementById('av-custom-idx').value);
+
+  var rec = {
+    averia: averia,
+    maquina: document.getElementById('av-maquina').value.trim(),
+    causa: document.getElementById('av-causa').value.trim(),
+    reparacion: document.getElementById('av-reparacion').value.trim(),
+    fecha: document.getElementById('av-fecha').value,
+    operario: document.getElementById('av-operario').value.trim(),
+    estado: document.getElementById('av-estado').value
+  };
+
+  if(oi >= 0){
+    if(!EDITED_FAULTS[sec]) EDITED_FAULTS[sec] = {};
+    EDITED_FAULTS[sec][oi] = rec;
+  } else if(ci >= 0){
+    if(!CUSTOM_FAULTS[sec]) CUSTOM_FAULTS[sec] = [];
+    CUSTOM_FAULTS[sec][ci] = rec;
+  } else {
+    if(!CUSTOM_FAULTS[sec]) CUSTOM_FAULTS[sec] = [];
+    CUSTOM_FAULTS[sec].push(rec);
+  }
+  _saveFaults();
+  closeAvModal();
+  showFaultSection(sec);
+}
+
+// Resetear contexto al abrir Mis Averías
+var _origOpenAvModal = openAvModal;
+function openAvModal(id){
+  document.getElementById('av-context').value = 'mis_averias';
+  document.getElementById('av-orig-idx').value = '-1';
+  document.getElementById('av-custom-idx').value = '-1';
+  _editFault = null;
+  _origOpenAvModal(id);
+}
+</script>
+<!-- ===== FIN EDICIÓN AVERÍAS POR SECCIÓN ===== -->
+
+<!-- ===== EDICIÓN TAREAS POR SECCIÓN ===== -->
+<!-- Modal editar/añadir tarea de sección -->
+<div id="te-modal" style="display:none" class="mt-modal" onclick="if(event.target===this)closeTareaEditModal()">
+  <div class="mt-modal-box">
+    <h3 id="te-modal-title">Nueva entrada</h3>
+    <input type="hidden" id="te-type">
+    <input type="hidden" id="te-orig-idx" value="-1">
+    <input type="hidden" id="te-custom-idx" value="-1">
+    <input id="te-titulo" class="mt-input" type="text" placeholder="Título / Tarea *" maxlength="200">
+    <input id="te-maquina" class="mt-input" type="text" placeholder="Máquina / Material (opcional)" maxlength="100">
+    <textarea id="te-desc" class="mt-input" placeholder="Descripción / Notas (opcional)" style="min-height:65px"></textarea>
+    <div style="display:flex;gap:8px">
+      <input id="te-fecha" class="mt-input" type="date" style="flex:1">
+      <input id="te-operario" class="mt-input" type="text" placeholder="Operario" style="flex:1" maxlength="50">
+    </div>
+    <div class="mt-row">
+      <button class="mt-cancel" onclick="closeTareaEditModal()">Cancelar</button>
+      <button class="mt-save" onclick="saveTareaEditModal()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var CUSTOM_TAREAS = JSON.parse(localStorage.getItem('ra1_ct_v1')||'{}');
+var EDITED_TAREAS = JSON.parse(localStorage.getItem('ra1_et_v1')||'{}');
+var HIDDEN_TAREAS = JSON.parse(localStorage.getItem('ra1_ht_v1')||'{}');
+var _editTarea = null;
+var _curTareaType = null;
+
+function _saveTareas(){
+  localStorage.setItem('ra1_ct_v1', JSON.stringify(CUSTOM_TAREAS));
+  localStorage.setItem('ra1_et_v1', JSON.stringify(EDITED_TAREAS));
+  localStorage.setItem('ra1_ht_v1', JSON.stringify(HIDDEN_TAREAS));
+}
+
+// Extrae campos comunes de cualquier tipo de registro de tarea
+function _extractTareaFields(type, rec){
+  if(!rec) return {titulo:'',maquina:'',descripcion:'',fecha:'',operario:''};
+  var titulo = rec.tarea||rec.averia||rec.maquina||rec.material||rec.mejora||rec.titulo||'';
+  var maquina = (type==='pedidos'||type==='mejoras') ? '' : (rec.maquina||rec.material||'');
+  var descripcion = rec.descripcion||rec.causa||rec.detalle||rec.solucion||rec.reparacion||rec.notas||'';
+  if(type==='mejoras') { titulo = rec.maquina||''; descripcion = rec.mejora||''; }
+  if(type==='pedidos') { titulo = rec.material||''; maquina = ''; }
+  if(type==='carretillas') { titulo = rec.maquina||''; descripcion = rec.cambio||''; }
+  if(type==='revision') { titulo = rec.maquina||''; descripcion = rec.tarea||''; maquina = ''; }
+  if(type==='diarias') { titulo = rec.texto||rec.titulo||''; descripcion = rec.semana||''; maquina = ''; }
+  return {titulo:titulo, maquina:maquina, descripcion:descripcion, fecha:rec.fecha||'', operario:rec.operario||''};
+}
+
+// Convierte un registro guardado al formato de visualización de cada tipo
+function _tareaRecToDisplay(type, rec){
+  var f = _extractTareaFields(type, rec);
+  return {tarea:f.titulo, maquina:f.maquina, descripcion:f.descripcion, fecha:f.fecha, operario:f.operario, _display:true};
+}
+
+function _mergedTareas(type){
+  var dataKey = {
+    reparaciones:'tareas_reparaciones', pendientes:'pendientes',
+    revision:'revision_periodica', carretillas:'carretillas',
+    mejoras:'mejoras', pedidos:'pedidos'
+  }[type];
+  var hiddenT = HIDDEN_TAREAS[type]||[];
+  var orig = dataKey ? (DATA[dataKey]||[]).map(function(r,i){
+    return Object.assign({}, r, (EDITED_TAREAS[type]&&EDITED_TAREAS[type][i])||{}, {_o:i,_c:-1});
+  }).filter(function(r){ return hiddenT.indexOf(r._o)===-1; }) : [];
+  var cust = (CUSTOM_TAREAS[type]||[]).map(function(r,i){
+    return Object.assign({}, r, {_o:-1,_c:i});
+  });
+  return orig.concat(cust);
+}
+
+function _tBtns(onEdit, onDel){
+  return '<div class="card-btns">'
+    +'<button class="card-edit-btn" onclick="'+onEdit+'">✏️</button>'
+    +(onDel?'<button class="card-del-btn" onclick="'+onDel+'">🗑</button>':'')
+    +'</div>';
+}
+
+function _teEscH(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function _teEscJs(s){ return (s||'').replace(/'/g,"\\'"); }
+
+// Renderiza una lista de cards con botones de edición
+function _renderTareasCards(records, type, el){
+  if(!records.length){
+    el.innerHTML='<div class="empty"><div class="empty-icon">📭</div>Sin registros. Pulsa + para añadir.</div>';
+    return;
+  }
+  el.innerHTML='<div class="card-list">'+records.map(function(r){
+    var oi = r._o!==undefined?r._o:-1;
+    var ci = r._c!==undefined?r._c:-1;
+    var f = _extractTareaFields(type, r);
+    var ec = "openTareaEditModal('"+_teEscJs(type)+"',"+oi+","+ci+");event.stopPropagation()";
+    var dc = "deleteTareaItem('"+_teEscJs(type)+"',"+oi+","+ci+");event.stopPropagation()";
+    var rData = JSON.stringify(r).replace(/"/g,'&quot;');
+    return '<div style="position:relative">'
+      +_tBtns(ec,dc)
+      +'<div class="fault-card" onclick="showFaultDetail('+rData+')">'
+      +'<div class="fault-card-header">'
+      +'<div class="fault-title">'+_teEscH(f.titulo||'–')+'</div>'
+      +'<div class="fault-meta">'
+      +(f.maquina?'<span class="tag tag-machine">'+_teEscH(f.maquina)+'</span>':'')
+      +(f.fecha&&f.fecha!==''?'<span class="tag tag-date">'+f.fecha.split('T')[0].split(' ')[0]+'</span>':'')
+      +(f.operario?'<span class="tag tag-op">'+_teEscH(f.operario)+'</span>':'')
+      +(r.hecho==='✓'?'<span class="tag tag-done">✓ Hecho</span>':'')
+      +'<span class="chevron">›</span>'
+      +'</div></div></div></div>';
+  }).join('')+'</div>';
+}
+
+// Renderiza Tareas Mensuales (diarias) con edición
+function _renderDiariasEditable(el){
+  var semanas = DATA.tareas_diarias;
+  var customItems = CUSTOM_TAREAS['diarias']||[];
+  var html = Object.entries(semanas).map(function(entry){
+    var sem=entry[0], items=entry[1];
+    return '<div class="semana-header">'+_teEscH(sem)+'</div>'
+      +items.map(function(item,i){
+        var origKey = sem+'|'+i;
+        var edited = EDITED_TAREAS['diarias']&&EDITED_TAREAS['diarias'][origKey];
+        var text = edited ? edited.texto : item;
+        var ec = "openTareaEditModal('diarias','"+_teEscJs(origKey)+"',-1);event.stopPropagation()";
+        return '<div style="position:relative;display:flex;align-items:center">'
+          +'<div class="card-btns" style="top:50%;transform:translateY(-50%)">'
+          +'<button class="card-edit-btn" onclick="'+ec+'">✏️</button></div>'
+          +'<div class="semana-item" style="flex:1;padding-right:70px">'
+          +'<div class="check-circle"></div><span>'+_teEscH(text)+'</span></div></div>';
+      }).join('');
+  }).join('');
+  // Custom diarias items
+  if(customItems.length){
+    html += '<div class="semana-header" style="border-top:1px solid var(--border)">Añadidos</div>'
+      +customItems.map(function(r,ci){
+        var ec = "openTareaEditModal('diarias',-1,"+ci+");event.stopPropagation()";
+        var dc = "deleteTareaItem('diarias',"+ci+");event.stopPropagation()";
+        return '<div style="position:relative;display:flex;align-items:center">'
+          +'<div class="card-btns" style="top:50%;transform:translateY(-50%)">'
+          +'<button class="card-edit-btn" onclick="'+ec+'">✏️</button>'
+          +'<button class="card-del-btn" onclick="'+dc+'">🗑</button></div>'
+          +'<div class="semana-item" style="flex:1;padding-right:70px">'
+          +'<div class="check-circle"></div><span>'+_teEscH(r.titulo||r.texto||'')+'</span></div></div>';
+      }).join('');
+  }
+  el.innerHTML = html;
+}
+
+// Sobrescribe showTareasSection con soporte de edición
+function showTareasSection(type){
+  if(type==='mis_tareas'){
+    document.getElementById('tareas-home').style.display='none';
+    document.getElementById('mis-tareas-detail').style.display='';
+    taskFilter='todas';
+    document.querySelectorAll('.mt-filter').forEach(function(b,i){b.classList.toggle('active-filter',i===0);});
+    renderMisTareas();
+    return;
+  }
+  _curTareaType = type;
+  document.getElementById('tareas-home').style.display='none';
+  document.getElementById('tareas-detail').style.display='';
+  document.getElementById('tareas-fab').style.display='flex';
+  var titles={
+    reparaciones:'Tareas de Reparación',pendientes:'Pendientes de Realizar',
+    revision:'Revisión Periódica',diarias:'Tareas Mensuales',
+    carretillas:'Carretillas',mejoras:'Mejoras',pedidos:'Pedidos y Envíos'
+  };
+  document.getElementById('tareas-detail-title').textContent=titles[type]||type;
+  var el=document.getElementById('tareas-list');
+
+  if(type==='diarias'){
+    _renderDiariasEditable(el);
+    return;
+  }
+  if(type==='revision'||type==='carretillas'||type==='mejoras'||type==='pedidos'||type==='reparaciones'||type==='pendientes'){
+    _renderTareasCards(_mergedTareas(type), type, el);
+    return;
+  }
+}
+
+function hideTareasSection(){
+  document.getElementById('tareas-detail').style.display='none';
+  document.getElementById('tareas-home').style.display='';
+  document.getElementById('tareas-fab').style.display='none';
+  _curTareaType = null;
+}
+
+function openTareaEditModal(type, origIdx, customIdx){
+  var t = type || _curTareaType;
+  _editTarea = {type:t, origIdx:origIdx, customIdx:customIdx};
+  var r = {titulo:'',maquina:'',descripcion:'',fecha:'',operario:''};
+
+  // Origen: índice original (puede ser número o clave "sem|i" para diarias)
+  if(origIdx !== null && origIdx !== -1 && origIdx !== '-1' && origIdx !== undefined){
+    if(t==='diarias'){
+      // origIdx es "SEMANA|i"
+      var parts = String(origIdx).split('|');
+      var sem = parts[0]; var idx = parseInt(parts[1]);
+      var baseText = (DATA.tareas_diarias[sem]||[])[idx]||'';
+      var edited = EDITED_TAREAS['diarias']&&EDITED_TAREAS['diarias'][origIdx];
+      r.titulo = edited ? edited.texto : baseText;
+      r.descripcion = sem;
+    } else {
+      var dataKey={reparaciones:'tareas_reparaciones',pendientes:'pendientes',revision:'revision_periodica',carretillas:'carretillas',mejoras:'mejoras',pedidos:'pedidos'}[t];
+      var base = dataKey ? ((DATA[dataKey]||[])[origIdx]||{}) : {};
+      var edit = (EDITED_TAREAS[t]&&EDITED_TAREAS[t][origIdx])||{};
+      var merged = Object.assign({},base,edit);
+      r = _extractTareaFields(t, merged);
+    }
+  } else if(customIdx >= 0){
+    var cr = (CUSTOM_TAREAS[t]||[])[customIdx]||{};
+    r = _extractTareaFields(t, cr);
+  }
+
+  document.getElementById('te-type').value = t;
+  document.getElementById('te-orig-idx').value = (origIdx!==null&&origIdx!==undefined) ? origIdx : -1;
+  document.getElementById('te-custom-idx').value = customIdx>=0 ? customIdx : -1;
+  document.getElementById('te-modal-title').textContent = (origIdx===null||origIdx===-1||origIdx==='-1') && customIdx<0 ? 'Nueva entrada' : 'Editar entrada';
+  document.getElementById('te-titulo').placeholder = t==='pedidos'?'Material *':t==='mejoras'?'Máquina *':'Tarea / Título *';
+  document.getElementById('te-maquina').style.display = (t==='pedidos'||t==='revision'||t==='diarias')?'none':'';
+  document.getElementById('te-titulo').value = r.titulo;
+  document.getElementById('te-maquina').value = r.maquina;
+  document.getElementById('te-desc').value = r.descripcion;
+  document.getElementById('te-fecha').value = r.fecha;
+  document.getElementById('te-operario').value = r.operario;
+  document.getElementById('te-modal').style.display='flex';
+  setTimeout(function(){document.getElementById('te-titulo').focus();},100);
+}
+
+function closeTareaEditModal(){
+  document.getElementById('te-modal').style.display='none';
+  _editTarea=null;
+}
+
+function saveTareaEditModal(){
+  var titulo=document.getElementById('te-titulo').value.trim();
+  if(!titulo){document.getElementById('te-titulo').focus();return;}
+  var t=document.getElementById('te-type').value;
+  var oi=document.getElementById('te-orig-idx').value;
+  var ci=parseInt(document.getElementById('te-custom-idx').value);
+  var rec={
+    titulo:titulo, maquina:document.getElementById('te-maquina').value.trim(),
+    descripcion:document.getElementById('te-desc').value.trim(),
+    fecha:document.getElementById('te-fecha').value,
+    operario:document.getElementById('te-operario').value.trim()
+  };
+
+  if(t==='diarias'){
+    if(oi!==null && oi!=='-1' && oi!=-1){
+      if(!EDITED_TAREAS['diarias']) EDITED_TAREAS['diarias']={};
+      EDITED_TAREAS['diarias'][oi]={texto:titulo};
+    } else if(ci>=0){
+      if(!CUSTOM_TAREAS['diarias']) CUSTOM_TAREAS['diarias']=[];
+      CUSTOM_TAREAS['diarias'][ci]=rec;
+    } else {
+      if(!CUSTOM_TAREAS['diarias']) CUSTOM_TAREAS['diarias']=[];
+      CUSTOM_TAREAS['diarias'].push(rec);
+    }
+  } else {
+    var oiNum=parseInt(oi);
+    if(oiNum>=0){
+      if(!EDITED_TAREAS[t]) EDITED_TAREAS[t]={};
+      EDITED_TAREAS[t][oiNum]=rec;
+    } else if(ci>=0){
+      if(!CUSTOM_TAREAS[t]) CUSTOM_TAREAS[t]=[];
+      CUSTOM_TAREAS[t][ci]=rec;
+    } else {
+      if(!CUSTOM_TAREAS[t]) CUSTOM_TAREAS[t]=[];
+      CUSTOM_TAREAS[t].push(rec);
+    }
+  }
+  _saveTareas();
+  closeTareaEditModal();
+  showTareasSection(t);
+}
+
+function deleteTareaItem(type, origIdx, customIdx){
+  if(!confirm('¿Eliminar este registro?')) return;
+  if(customIdx>=0){
+    if(!CUSTOM_TAREAS[type]) return;
+    CUSTOM_TAREAS[type].splice(customIdx,1);
+  } else if(origIdx>=0){
+    if(!HIDDEN_TAREAS[type]) HIDDEN_TAREAS[type]=[];
+    if(HIDDEN_TAREAS[type].indexOf(origIdx)===-1) HIDDEN_TAREAS[type].push(origIdx);
+  }
+  _saveTareas();
+  showTareasSection(type);
+}
+</script>
+<!-- ===== FIN EDICIÓN TAREAS POR SECCIÓN ===== -->
+
+<!-- ===== EDICIÓN REFERENCIA ===== -->
+
+<!-- Modal editar/añadir paso de Procesos -->
+<div id="es-modal" style="display:none" class="mt-modal" onclick="if(event.target===this)closeStepModal()">
+  <div class="mt-modal-box">
+    <h3 id="es-modal-title">Nuevo paso</h3>
+    <div id="es-titulo-wrap" style="display:none">
+      <input id="es-titulo" class="mt-input" type="text" placeholder="Título del elemento *" maxlength="200">
+    </div>
+    <textarea id="es-desc" class="mt-input" placeholder="Descripción / contenido del paso *" style="min-height:90px"></textarea>
+    <div class="mt-row">
+      <button class="mt-cancel" onclick="closeStepModal()">Cancelar</button>
+      <button class="mt-save" onclick="saveStepModal()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<div id="re-modal" style="display:none" class="mt-modal" onclick="if(event.target===this)closeRefModal()">
+  <div class="mt-modal-box">
+    <h3 id="re-modal-title">Nueva entrada</h3>
+    <input type="hidden" id="re-type">
+    <input type="hidden" id="re-orig-idx" value="-1">
+    <input type="hidden" id="re-custom-idx" value="-1">
+    <!-- campo A: título / tecla / alarma / contraseña descripcion -->
+    <input id="re-campo-a" class="mt-input" type="text" placeholder="Título *" maxlength="200">
+    <!-- campo B: descripcion / codigo / accion -->
+    <textarea id="re-campo-b" class="mt-input" placeholder="Descripción / Valor *" style="min-height:70px"></textarea>
+    <!-- campo C: detalle (solo contrasenas usa código visual) -->
+    <input id="re-campo-c" class="mt-input" type="text" placeholder="Detalle adicional (opcional)" maxlength="200" style="display:none">
+    <div class="mt-row">
+      <button class="mt-cancel" onclick="closeRefModal()">Cancelar</button>
+      <button class="mt-save" onclick="saveRefModal()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var CUSTOM_REF  = JSON.parse(localStorage.getItem('ra1_cr_v1')||'{}');
+var EDITED_REF  = JSON.parse(localStorage.getItem('ra1_er_v1')||'{}');
+var HIDDEN_REF = JSON.parse(localStorage.getItem('ra1_hr_v1')||'{}');
+var _curRef = null;
+var _editRef = null;
+
+function _saveRef(){ localStorage.setItem('ra1_cr_v1',JSON.stringify(CUSTOM_REF)); localStorage.setItem('ra1_er_v1',JSON.stringify(EDITED_REF)); localStorage.setItem('ra1_hr_v1',JSON.stringify(HIDDEN_REF)); }
+
+function _getOrigRef(type){
+  if(type==='contrasenas') return DATA.contrasenas;
+  if(type==='alarmas')     return DATA.alarmas;
+  if(type==='comandos')    return DATA.comandos;
+  if(type==='notas')       return DATA.notas;
+  return [];
+}
+
+function _mergedRef(type){
+  var hiddenR=HIDDEN_REF[type]||[];
+  var orig=_getOrigRef(type).map(function(r,i){return Object.assign({},r,(EDITED_REF[type]&&EDITED_REF[type][i])||{},{_o:i,_c:-1});}).filter(function(r){return hiddenR.indexOf(r._o)===-1;});
+  var cust=(CUSTOM_REF[type]||[]).map(function(r,i){return Object.assign({},r,{_o:-1,_c:i});});
+  return orig.concat(cust);
+}
+
+function _refEscH(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function _refEscJs(s){return(s||'').replace(/'/g,"\\'");}
+
+function _refBtns(onEdit,onDel){
+  return '<div class="card-btns"><button class="card-edit-btn" onclick="'+onEdit+'">✏️</button>'+(onDel?'<button class="card-del-btn" onclick="'+onDel+'">🗑</button>':'')+'</div>';
+}
+
+// Sobrescribe showRefSection con soporte de edición
+function showRefSection(type){
+  _curRef = type;
+  document.getElementById('ref-home').style.display='none';
+  document.getElementById('ref-detail').style.display='';
+  document.getElementById('ref-fab').style.display='flex';
+  var titles={contrasenas:'🔑 Contraseñas',alarmas:'🚨 Alarmas',comandos:'⌨ Comandos MODSOF',notas:'📝 Notas Importantes'};
+  document.getElementById('ref-detail-title').textContent=titles[type]||type;
+  var el=document.getElementById('ref-list');
+  var merged=_mergedRef(type);
+
+  if(type==='contrasenas'){
+    el.innerHTML='<div style="padding:16px 0">'+merged.map(function(r){
+      var oi=r._o!==undefined?r._o:-1; var ci=r._c!==undefined?r._c:-1;
+      var ec="openRefModal('"+_refEscJs(type)+"',"+oi+","+ci+");event.stopPropagation()";
+      var dc="deleteRefItem('"+_refEscJs(type)+"',"+oi+","+ci+");event.stopPropagation()";
+      return '<div style="position:relative">'+_refBtns(ec,dc)+'<div class="pass-card"><div class="pass-desc">'+_refEscH(r.descripcion||'')+'</div><div class="pass-code">'+_refEscH(r.codigo||r.valor||'')+'</div></div></div>';
+    }).join('')+'</div>';
+
+  } else if(type==='alarmas'){
+    el.innerHTML='<div class="card-list">'+merged.map(function(r){
+      var oi=r._o!==undefined?r._o:-1; var ci=r._c!==undefined?r._c:-1;
+      var ec="openRefModal('alarmas',"+oi+","+ci+");event.stopPropagation()";
+      var dc="deleteRefItem('alarmas',"+oi+","+ci+");event.stopPropagation()";
+      return '<div style="position:relative">'+_refBtns(ec,dc)+'<div class="info-card" style="margin:0 0 8px"><div class="info-card-title">'+_refEscH(r.alarma||r.titulo||'')+'</div><div class="info-card-body">'+_refEscH(r.descripcion||'')+'</div></div></div>';
+    }).join('')+'</div>';
+
+  } else if(type==='comandos'){
+    el.innerHTML='<div class="step-list">'+merged.map(function(r){
+      var oi=r._o!==undefined?r._o:-1; var ci=r._c!==undefined?r._c:-1;
+      var ec="openRefModal('comandos',"+oi+","+ci+");event.stopPropagation()";
+      var dc="deleteRefItem('comandos',"+oi+","+ci+");event.stopPropagation()";
+      return '<div style="position:relative">'+_refBtns(ec,dc)+'<div class="step-item" style="padding-right:70px"><div class="step-num" style="min-width:90px;font-size:10px;letter-spacing:0">'+_refEscH(r.tecla||'')+'</div><div class="step-text">'+_refEscH(r.accion||'')+'</div></div></div>';
+    }).join('')+'</div>';
+
+  } else if(type==='notas'){
+    el.innerHTML='<div class="card-list">'+merged.map(function(r){
+      var oi=r._o!==undefined?r._o:-1; var ci=r._c!==undefined?r._c:-1;
+      var ec="openRefModal('notas',"+oi+","+ci+");event.stopPropagation()";
+      var dc="deleteRefItem('notas',"+oi+","+ci+");event.stopPropagation()";
+      return '<div style="position:relative">'+_refBtns(ec,dc)+'<div class="info-card" style="margin:0 0 8px"><div class="info-card-title">'+_refEscH(r.titulo||'')+'</div><div class="info-card-body">'+_refEscH(r.descripcion||'')+'</div></div></div>';
+    }).join('')+'</div>';
+  }
+}
+
+function hideRefSection(){
+  document.getElementById('ref-detail').style.display='none';
+  document.getElementById('ref-home').style.display='';
+  document.getElementById('ref-fab').style.display='none';
+  _curRef=null;
+}
+
+function openRefModal(type,origIdx,customIdx){
+  var t=type||_curRef;
+  _editRef={type:t,origIdx:origIdx,customIdx:customIdx};
+  var r={descripcion:'',codigo:'',alarma:'',tecla:'',accion:'',titulo:'',valor:''};
+  if(origIdx>=0){
+    r=Object.assign({},_getOrigRef(t)[origIdx]||{},(EDITED_REF[t]&&EDITED_REF[t][origIdx])||{});
+  } else if(customIdx>=0){
+    r=Object.assign({},(CUSTOM_REF[t]||[])[customIdx]||{});
+  }
+
+  var labelA={contrasenas:'Descripción *',alarmas:'Nombre alarma *',comandos:'Tecla / Combinación *',notas:'Título *'}[t]||'Campo A *';
+  var labelB={contrasenas:'Código / Contraseña *',alarmas:'Descripción *',comandos:'Acción *',notas:'Contenido *'}[t]||'Campo B *';
+  var valA={contrasenas:r.descripcion,alarmas:r.alarma||r.titulo,comandos:r.tecla,notas:r.titulo}[t]||'';
+  var valB={contrasenas:r.codigo||r.valor,alarmas:r.descripcion,comandos:r.accion,notas:r.descripcion}[t]||'';
+
+  document.getElementById('re-modal-title').textContent=(origIdx===-1&&customIdx===-1)?'Nueva entrada':'Editar entrada';
+  document.getElementById('re-type').value=t;
+  document.getElementById('re-orig-idx').value=origIdx>=0?origIdx:-1;
+  document.getElementById('re-custom-idx').value=customIdx>=0?customIdx:-1;
+  document.getElementById('re-campo-a').placeholder=labelA;
+  document.getElementById('re-campo-b').placeholder=labelB;
+  document.getElementById('re-campo-a').value=valA;
+  document.getElementById('re-campo-b').value=valB;
+  document.getElementById('re-campo-c').style.display='none';
+  document.getElementById('re-modal').style.display='flex';
+  setTimeout(function(){document.getElementById('re-campo-a').focus();},100);
+}
+
+function closeRefModal(){document.getElementById('re-modal').style.display='none';_editRef=null;}
+
+function saveRefModal(){
+  var a=document.getElementById('re-campo-a').value.trim();
+  var b=document.getElementById('re-campo-b').value.trim();
+  if(!a){document.getElementById('re-campo-a').focus();return;}
+  var t=document.getElementById('re-type').value;
+  var oi=parseInt(document.getElementById('re-orig-idx').value);
+  var ci=parseInt(document.getElementById('re-custom-idx').value);
+
+  var rec;
+  if(t==='contrasenas')  rec={descripcion:a,codigo:b};
+  else if(t==='alarmas') rec={alarma:a,descripcion:b};
+  else if(t==='comandos')rec={tecla:a,accion:b};
+  else                    rec={titulo:a,descripcion:b};
+
+  if(oi>=0){
+    if(!EDITED_REF[t]) EDITED_REF[t]={};
+    EDITED_REF[t][oi]=rec;
+  } else if(ci>=0){
+    if(!CUSTOM_REF[t]) CUSTOM_REF[t]=[];
+    CUSTOM_REF[t][ci]=rec;
+  } else {
+    if(!CUSTOM_REF[t]) CUSTOM_REF[t]=[];
+    CUSTOM_REF[t].push(rec);
+  }
+  _saveRef();
+  closeRefModal();
+  showRefSection(t);
+}
+
+function deleteRefItem(type,origIdx,customIdx){
+  if(!confirm('¿Eliminar esta entrada?')) return;
+  if(customIdx>=0){
+    if(!CUSTOM_REF[type]) return;
+    CUSTOM_REF[type].splice(customIdx,1);
+  } else if(origIdx>=0){
+    if(!HIDDEN_REF[type]) HIDDEN_REF[type]=[];
+    if(HIDDEN_REF[type].indexOf(origIdx)===-1) HIDDEN_REF[type].push(origIdx);
+  }
+  _saveRef();
+  showRefSection(type);
+}
+
+// Sobrescribe hideRefSection original si existe
+var _origHideRef = typeof hideRefSection === 'function' ? null : null;
+</script>
+<!-- ===== FIN EDICIÓN REFERENCIA ===== -->
+
+<!-- ANADIR APARTADO -->
+<div id="add-section-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:999;align-items:flex-end;justify-content:center" onclick="if(event.target===this)closeAddSectionModal()">
+  <div style="background:var(--bg);border-radius:20px 20px 0 0;padding:24px 20px 36px;width:100%;max-width:480px;box-shadow:0 -4px 32px rgba(0,0,0,0.15)">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <h3 style="font-size:16px;font-weight:700;color:var(--text)">Nuevo apartado</h3>
+      <button onclick="closeAddSectionModal()" style="background:var(--bg3);border:none;border-radius:50%;width:30px;height:30px;font-size:18px;color:var(--text2);cursor:pointer;line-height:1">x</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div>
+        <div style="font-size:11px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Icono (emoji)</div>
+        <input id="new-section-icon" type="text" placeholder="Escribe un emoji" maxlength="4" style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:22px;color:var(--text);outline:none;text-align:center">
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Nombre *</div>
+        <input id="new-section-name" type="text" placeholder="Ej: Compresor" style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:14px;color:var(--text);outline:none">
+      </div>
+    </div>
+    <button onclick="saveNewSection()" style="margin-top:20px;width:100%;background:var(--orange);color:white;border:none;border-radius:10px;padding:14px;font-size:15px;font-weight:700;cursor:pointer">Crear apartado</button>
+  </div>
+</div>
+<script>
+var CUSTOM_SECTIONS=JSON.parse(localStorage.getItem('ra1_custom_sections')||'[]');
+function renderCustomSections(){
+  var grid=document.querySelector('.section-grid');
+  if(!grid)return;
+  document.querySelectorAll('.custom-section-card').forEach(function(el){el.remove();});
+  var addBtn=grid.querySelector('[onclick="openAddSectionModal()"]');
+  CUSTOM_SECTIONS.forEach(function(s,i){
+    var div=document.createElement('div');
+    div.className='section-card custom-section-card';
+    div.style.cssText='position:relative;cursor:default';
+    div.innerHTML='<span class="section-icon">'+(s.icon||'&#128193;')+'</span>'
+      +'<div class="section-name">'+s.name+'</div>'
+      +'<div class="section-count">Apartado personalizado</div>'
+      +'<button onclick="deleteCustomSection('+i+');event.stopPropagation()" style="position:absolute;top:8px;right:8px;background:none;border:none;font-size:15px;color:var(--text3);cursor:pointer" title="Eliminar">&#128465;</button>';
+    grid.insertBefore(div,addBtn);
+  });
+}
+function openAddSectionModal(){
+  document.getElementById('add-section-modal').style.display='flex';
+  document.getElementById('new-section-name').value='';
+  document.getElementById('new-section-icon').value='';
+  setTimeout(function(){document.getElementById('new-section-name').focus();},120);
+}
+function closeAddSectionModal(){document.getElementById('add-section-modal').style.display='none';}
+function saveNewSection(){
+  var name=document.getElementById('new-section-name').value.trim();
+  var icon=document.getElementById('new-section-icon').value.trim()||'&#128193;';
+  if(!name){document.getElementById('new-section-name').focus();return;}
+  CUSTOM_SECTIONS.push({name:name,icon:icon});
+  localStorage.setItem('ra1_custom_sections',JSON.stringify(CUSTOM_SECTIONS));
+  renderCustomSections();
+  closeAddSectionModal();
+}
+function deleteCustomSection(i){
+  if(!confirm('Eliminar este apartado?'))return;
+  CUSTOM_SECTIONS.splice(i,1);
+  localStorage.setItem('ra1_custom_sections',JSON.stringify(CUSTOM_SECTIONS));
+  renderCustomSections();
+}
+document.addEventListener('DOMContentLoaded',renderCustomSections);
+</script>
+</body>

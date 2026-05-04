@@ -42,6 +42,8 @@
 })();
 </script>
 <title>RA-1 · Averías y Ayudas</title>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
@@ -1960,5 +1962,98 @@ function deleteCustomSection(i){
   renderCustomSections();
 }
 document.addEventListener('DOMContentLoaded',renderCustomSections);
+</script>
+
+<!-- ===== FIREBASE SYNC ===== -->
+<script>
+(function(){
+  var FB_CONFIG = {
+    apiKey: "AIzaSyDr__AqQPpuiu9V6U7sORO4L7lFjqegGn0",
+    authDomain: "averias-y-ayudas.firebaseapp.com",
+    databaseURL: "https://averias-y-ayudas-default-rtdb.europe-west1.firebaseio.com",
+    projectId: "averias-y-ayudas",
+    storageBucket: "averias-y-ayudas.firebasestorage.app",
+    messagingSenderId: "813970968781",
+    appId: "1:813970968781:web:307ca1d6633102aa2e9984"
+  };
+
+  if (!firebase.apps.length) firebase.initializeApp(FB_CONFIG);
+  var db = firebase.database();
+
+  var SYNC_KEYS = [
+    'ra1_tasks_v2','ra1_mis_averias_v1',
+    'ra1_cs_v1','ra1_es_v1','ra1_hs_v1',
+    'ra1_cf_v1','ra1_ef_v1','ra1_hf_v1',
+    'ra1_ct_v1','ra1_et_v1','ra1_ht_v1',
+    'ra1_cr_v1','ra1_er_v1','ra1_hr_v1',
+    'ra1_custom_sections'
+  ];
+
+  function fbKey(k){ return k.replace(/[.$#\[\]/]/g,'_'); }
+
+  // Interceptar localStorage.setItem para sincronizar a Firebase
+  var _origSet = localStorage.setItem.bind(localStorage);
+  localStorage.setItem = function(key, value){
+    _origSet(key, value);
+    if(SYNC_KEYS.indexOf(key) !== -1){
+      try {
+        db.ref('sync/' + fbKey(key)).set(JSON.parse(value));
+      } catch(e){}
+    }
+  };
+
+  // Recargar todas las variables en memoria desde localStorage
+  function reloadVars(){
+    if(typeof TASKS !== 'undefined') try{ TASKS = JSON.parse(localStorage.getItem('ra1_tasks_v2')||'[]'); }catch(e){}
+    if(typeof MIS_AVERIAS !== 'undefined') try{ MIS_AVERIAS = JSON.parse(localStorage.getItem('ra1_mis_averias_v1')||'[]'); }catch(e){}
+    if(typeof CUSTOM_STEPS !== 'undefined') try{ CUSTOM_STEPS = JSON.parse(localStorage.getItem('ra1_cs_v1')||'{}'); }catch(e){}
+    if(typeof EDITED_STEPS !== 'undefined') try{ EDITED_STEPS = JSON.parse(localStorage.getItem('ra1_es_v1')||'{}'); }catch(e){}
+    if(typeof HIDDEN_STEPS !== 'undefined') try{ HIDDEN_STEPS = JSON.parse(localStorage.getItem('ra1_hs_v1')||'{}'); }catch(e){}
+    if(typeof CUSTOM_FAULTS !== 'undefined') try{ CUSTOM_FAULTS = JSON.parse(localStorage.getItem('ra1_cf_v1')||'{}'); }catch(e){}
+    if(typeof EDITED_FAULTS !== 'undefined') try{ EDITED_FAULTS = JSON.parse(localStorage.getItem('ra1_ef_v1')||'{}'); }catch(e){}
+    if(typeof HIDDEN_FAULTS !== 'undefined') try{ HIDDEN_FAULTS = JSON.parse(localStorage.getItem('ra1_hf_v1')||'{}'); }catch(e){}
+    if(typeof CUSTOM_TAREAS !== 'undefined') try{ CUSTOM_TAREAS = JSON.parse(localStorage.getItem('ra1_ct_v1')||'{}'); }catch(e){}
+    if(typeof EDITED_TAREAS !== 'undefined') try{ EDITED_TAREAS = JSON.parse(localStorage.getItem('ra1_et_v1')||'{}'); }catch(e){}
+    if(typeof HIDDEN_TAREAS !== 'undefined') try{ HIDDEN_TAREAS = JSON.parse(localStorage.getItem('ra1_ht_v1')||'{}'); }catch(e){}
+    if(typeof CUSTOM_REF !== 'undefined') try{ CUSTOM_REF = JSON.parse(localStorage.getItem('ra1_cr_v1')||'{}'); }catch(e){}
+    if(typeof EDITED_REF !== 'undefined') try{ EDITED_REF = JSON.parse(localStorage.getItem('ra1_er_v1')||'{}'); }catch(e){}
+    if(typeof HIDDEN_REF !== 'undefined') try{ HIDDEN_REF = JSON.parse(localStorage.getItem('ra1_hr_v1')||'{}'); }catch(e){}
+    if(typeof CUSTOM_SECTIONS !== 'undefined') try{ CUSTOM_SECTIONS = JSON.parse(localStorage.getItem('ra1_custom_sections')||'[]'); }catch(e){}
+    // Actualizar contadores y secciones personalizadas
+    try{ if(typeof updateMisTareasCount==='function') updateMisTareasCount(); }catch(e){}
+    try{ if(typeof updateMisAveriasCount==='function') updateMisAveriasCount(); }catch(e){}
+    try{ if(typeof renderCustomSections==='function') renderCustomSections(); }catch(e){}
+  }
+
+  // Escuchar cambios en tiempo real desde Firebase
+  var _isFirstLoad = true;
+  db.ref('sync').on('value', function(snap){
+    var data = snap.val() || {};
+    var changed = false;
+    SYNC_KEYS.forEach(function(key){
+      var fk = fbKey(key);
+      if(data[fk] !== undefined && data[fk] !== null){
+        var newVal = JSON.stringify(data[fk]);
+        var curVal = localStorage.getItem(key);
+        if(newVal !== curVal){
+          _origSet(key, newVal);
+          changed = true;
+        }
+      }
+    });
+    if(changed || _isFirstLoad){
+      _isFirstLoad = false;
+      reloadVars();
+    }
+  });
+
+  // Indicador de sincronización
+  var syncDot = document.createElement('div');
+  syncDot.id = 'sync-dot';
+  syncDot.title = 'Sincronizado con Firebase';
+  syncDot.style.cssText = 'position:fixed;top:10px;right:10px;width:8px;height:8px;border-radius:50%;background:#22c55e;z-index:9999;opacity:0.7';
+  document.body.appendChild(syncDot);
+
+})();
 </script>
 </body>
